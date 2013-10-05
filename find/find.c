@@ -45,7 +45,7 @@ void listFiles(char* dirName){
 
 					//Devide and iNode Number
 					printf("%ld/%lu\t",fileStat.st_dev,fileStat.st_ino);
-					// Permissions
+					// Permissions (bitwise checks)
 					printf( (S_ISDIR(fileStat.st_mode)) ? "d" : "-");
 				    printf( (fileStat.st_mode & S_IRUSR) ? "r" : "-");
 				    printf( (fileStat.st_mode & S_IWUSR) ? "w" : "-");
@@ -100,7 +100,6 @@ void listFiles(char* dirName){
 
 }
 
-
 int main (int argc, char **argv){
 	int index;
 	int optVal;
@@ -133,8 +132,6 @@ int main (int argc, char **argv){
 	 }
 	}
 
-
-
 	if(optind == argc){
 		dirName = ".";
 	} else{
@@ -142,8 +139,6 @@ int main (int argc, char **argv){
 	}
 
 	listFiles(dirName);
-
-
 
 	return 0;
 }
