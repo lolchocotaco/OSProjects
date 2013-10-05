@@ -21,54 +21,13 @@
 extern int errno;
 
 
-void detailedInfo(char * dirName){
-		struct stat fileStat;
-
-	if(stat(dirName,&fileStat)>=0){
-		struct passwd * ownerInfo;
-		struct group * groupInfo;
-		char mTime[20];
-
-		//Devide and iNode Numbre
-		printf("%ld/%lu\t",fileStat.st_dev,fileStat.st_ino);
-		// Permissions
-		printf( (S_ISDIR(fileStat.st_mode)) ? "d" : "-");
-	    printf( (fileStat.st_mode & S_IRUSR) ? "r" : "-");
-	    printf( (fileStat.st_mode & S_IWUSR) ? "w" : "-");
-	    printf( (fileStat.st_mode & S_IXUSR) ? "x" : "-");
-	    printf( (fileStat.st_mode & S_IRGRP) ? "r" : "-");
-	    printf( (fileStat.st_mode & S_IWGRP) ? "w" : "-");
-	    printf( (fileStat.st_mode & S_IXGRP) ? "x" : "-");
-	    printf( (fileStat.st_mode & S_IROTH) ? "r" : "-");
-	    printf( (fileStat.st_mode & S_IWOTH) ? "w" : "-");
-	    printf( (fileStat.st_mode & S_IXOTH) ? "x" : "-");
-	    //Number of links
-	   	printf("\t%ld",fileStat.st_nlink);
-	   	// Owner of file
-	   	if( (ownerInfo = getpwuid(fileStat.st_uid) )!= NULL)
-	   		printf("\t%s",ownerInfo->pw_name);
-	   	else
-	   		printf("\t%d",fileStat.st_uid);
-	   	// Group of file
-	   	if( (groupInfo = getgrgid(fileStat.st_gid) ) !=NULL)
-	   		printf("\t%s",groupInfo->gr_name);
-	   	else
-	   		printf("\t%ld",(long)fileStat.st_gid);
-	   	// Size of file
-	   	printf("\t%ld", fileStat.st_size);
-	   	// Last Modified
-	   	strftime(mTime,20,"%b %d %Y %H:%M",localtime(&fileStat.st_mtime));
-	   	printf("\t%s",mTime);
-	   	//File Name
-	   	printf("\t%s\n",dirName);
-	}
-}
 
 
 void listFiles(char* dirName){
 	DIR * dp; //Directory Pointer
 	struct dirent *sp; //Directory Structure pointer
 	char * d_name;
+	struct stat fileStat; // Struture to hold file stats
 
 	dp = opendir(dirName);
 	if(dp != NULL){
@@ -77,10 +36,52 @@ void listFiles(char* dirName){
 			if(strcmp(sp->d_name, "..") != 0 && strcmp(sp->d_name,".") != 0){
 				int path_length;
 				char path[PATH_MAX];
-				path_length = snprintf(path, PATH_MAX,"%s/%s",dirName,d_name);
-				detailedInfo(path);
-				// printf("%s\n",path);
-				// printf("%s/%s\n",dirName,sp->d_name);
+				path_length = snprintf(path, PATH_MAX,"%s/%s",dirName,sp->d_name);
+				// Displaying stats
+				if(stat(path,&fileStat)>=0){
+					struct passwd * ownerInfo;
+					struct group * groupInfo;
+					char mTime[20];
+
+					//Devide and iNode Number
+					printf("%ld/%lu\t",fileStat.st_dev,fileStat.st_ino);
+					// Permissions
+					printf( (S_ISDIR(fileStat.st_mode)) ? "d" : "-");
+				    printf( (fileStat.st_mode & S_IRUSR) ? "r" : "-");
+				    printf( (fileStat.st_mode & S_IWUSR) ? "w" : "-");
+				    printf( (fileStat.st_mode & S_IXUSR) ? "x" : "-");
+				    printf( (fileStat.st_mode & S_IRGRP) ? "r" : "-");
+				    printf( (fileStat.st_mode & S_IWGRP) ? "w" : "-");
+				    printf( (fileStat.st_mode & S_IXGRP) ? "x" : "-");
+				    printf( (fileStat.st_mode & S_IROTH) ? "r" : "-");
+				    printf( (fileStat.st_mode & S_IWOTH) ? "w" : "-");
+				    printf( (fileStat.st_mode & S_IXOTH) ? "x" : "-");
+				    //Number of links
+				   	printf("\t%ld",fileStat.st_nlink);
+				   	// Owner of file
+				   	if( (ownerInfo = getpwuid(fileStat.st_uid) )!= NULL)
+				   		printf("\t%s",ownerInfo->pw_name);
+				   	else
+				   		printf("\t%d",fileStat.st_uid);
+				   	// Group of file
+				   	if( (groupInfo = getgrgid(fileStat.st_gid) ) !=NULL)
+				   		printf("\t%s",groupInfo->gr_name);
+				   	else
+				   		printf("\t%d",fileStat.st_gid);
+				   	// Size of file
+				   	if(sp->d_type == DT_BLK || sp->d_type == DT_CHR)
+				   		printf("\t0x%x",(unsigned int)fileStat.st_size);
+				   	else
+				   		printf("\t%ld", fileStat.st_size);
+				   	// Last Modified
+				   	strftime(mTime,20,"%b %d %Y %H:%M",localtime(&fileStat.st_mtime));
+				   	printf("\t%s",mTime);
+				   	//File Name
+				   	printf("\t%s\n",path);
+				} else{ // Throw error and continue listing others
+					fprintf(stderr,"Error with %s: %s",path,strerror(errno));
+				}
+
 				if(sp->d_type == DT_DIR){
 
 					if(path_length >= PATH_MAX){
