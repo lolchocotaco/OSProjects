@@ -19,39 +19,56 @@ extern int errno;
 
 
 int main (int argc, char **argv){
-int index;
-int optVal;
+	int index;
+	int optVal;
 
-int uflag = 0;
-int mflag = 0;
-opterr = 0;
-// Find the operators
- while ((optVal = getopt (argc, argv, "u:m:")) != -1) {
-   switch (optVal)
-     {
-     case 'u':
-       uflag = 1;
-       // outName = optarg;
-       break;
-     case 'm':
-       mflag = 1;
-       // bufferSize = atoi(optarg); // Save the buffer size
-       break;
-     case '?':
-       if (optopt == 'u' || optopt =='m')
-         fprintf (stderr, "Option -%c requires a additional arguments.\n", optopt);
-       else
-         fprintf (stderr,  "Unknown option `-%c'.\n", optopt);
-       return -1;
-     default:
-       abort ();
-     }
- }
+	int uflag = 0;
+	int mflag = 0;
+	opterr = 0;
+	DIR * dp; //Directory Pointer
+	struct dirent *sp; //Directory Structure pointer
+	char * dirName;
 
- for(index = optind; index <argc; index++){
- 	printf("Non-Option Parameters: %s\n", argv[index]);
- }
+	// Find the operators
+	while ((optVal = getopt (argc, argv, "u:m:")) != -1) {
+	switch (optVal)
+	 {
+	 case 'u':
+	   uflag = 1;
+	   // outName = optarg;
+	   break;
+	 case 'm':
+	   mflag = 1;
+	   // bufferSize = atoi(optarg); // Save the buffer size
+	   break;
+	 case '?':
+	   if (optopt == 'u' || optopt =='m')
+	     fprintf (stderr, "Option -%c requires a additional arguments.\n", optopt);
+	   else
+	     fprintf (stderr,  "Unknown option `-%c'.\n", optopt);
+	   return -1;
+	 default:
+	   abort ();
+	 }
+	}
 
 
-return 0;
+
+	if(optind == argc){
+		dirName = "./";
+	} else{
+		dirName = argv[optind];
+	}
+
+	dp = opendir(dirName);
+	if(dp != NULL){
+		while(sp = readdir(dp)){
+			puts(sp->d_name);
+		}
+		(void)closedir(dp);
+	}else{
+		fprintf(stderr,"Could not open directory '%s': %s\n", dirName, strerror(errno));
+	}
+
+	return 0;
 }
