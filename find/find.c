@@ -20,7 +20,12 @@
 #include <grp.h>
 extern int errno;
 
-
+int uflag = 0;
+int mflag = 0;
+int uid = 0;
+int mTime = 0;
+time_t currentTime;
+int powOne = 1;
 
 
 void listFiles(char* dirName){
@@ -39,11 +44,16 @@ void listFiles(char* dirName){
 				path_length = snprintf(path, PATH_MAX,"%s/%s",dirName,sp->d_name);
 				// Displaying stats
 				if(stat(path,&fileStat)>=0){
+					if(uflag && fileStat.st_uid != uid)
+						continue;
+					if(mflag && powOne*(currentTime - fileStat.st_mtime) < mTime)
+						continue;
+
 					struct passwd * ownerInfo;
 					struct group * groupInfo;
 					char mTime[20];
 
-					//Devide and iNode Number
+					// Device and iNode Number
 					printf("%ld/%lu\t",fileStat.st_dev,fileStat.st_ino);
 					// Permissions (bitwise checks)
 					printf( (S_ISDIR(fileStat.st_mode)) ? "d" : "-");
@@ -92,7 +102,10 @@ void listFiles(char* dirName){
 				}
 			}			
 		}
-		(void)closedir(dp);
+		if(closedir(dp)){
+			fprintf(stderr,"Error closing '%s' : %s\n",dirName,strerror(errno));
+			exit(1);
+		}
 	}else{
 		fprintf(stderr,"Could not open directory '%s': %s\n", dirName, strerror(errno));
 		exit(1);
@@ -100,36 +113,59 @@ void listFiles(char* dirName){
 
 }
 
+
+
 int main (int argc, char **argv){
 	int index;
 	int optVal;
-	int uflag = 0;
-	int mflag = 0;
+
 	opterr = 0;
 	char * dirName;
-	
+	struct passwd *userPtr;
 
 	// Find the operators
 	while ((optVal = getopt (argc, argv, "u:m:")) != -1) {
-	switch (optVal)
-	 {
-	 case 'u':
-	   uflag = 1;
-	   // outName = optarg;
-	   break;
-	 case 'm':
-	   mflag = 1;
-	   // mTimeerSize = atoi(optarg); // Save the mTimeer size
-	   break;
-	 case '?':
-	   if (optopt == 'u' || optopt =='m')
-	     fprintf (stderr, "Option -%c requires a additional arguments.\n", optopt);
-	   else
-	     fprintf (stderr,  "Unknown option `-%c'.\n", optopt);
-	   return -1;
-	 default:
-	   abort ();
-	 }
+		switch (optVal) {
+			case 'u':
+			  uflag = 1;
+			  if(isalpha(optarg[0])){
+			  	if( (userPtr = getpwnam(optarg)) != NULL) {
+			  		uid = userPtr->pw_uid;
+			  	} else {
+			  		fprintf(stderr,"Cannot find user: '%s'\n",optarg);
+			  		exit(1);
+			  	}
+			  }
+			  else if(isdigit(optarg[0])){
+			  	uid = atoi(optarg);
+			  } else{
+			  	fprintf(stderr, "Input a valid UID/Username\n");
+			  	exit(1);
+			  }
+			  break;
+			case 'm':
+			  mflag = 1;
+			  if(isdigit(optarg[0]) || optarg[0] == '-' ){
+			  	mTime = atoi(optarg);
+			  	if(mTime <0)
+			  		powOne = -1;
+			  	else
+			  		powOne = 1;
+			  	time(&currentTime);
+			  } else{
+			  	fprintf(stderr,"Option 'm' requres numeric input\n");
+			  	exit(1);
+			  }
+			  break;
+			case '?':
+			  if (optopt == 'u' || optopt =='m')
+			    fprintf (stderr, "Option -%c requires a additional arguments.\n", optopt);
+			  else
+			    fprintf (stderr,  "Unknown option `-%c'.\n", optopt);
+			  return -1;
+			default:
+			  abort ();
+		 }
 	}
 
 	if(optind == argc){
