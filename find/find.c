@@ -66,25 +66,6 @@ void listFiles(char* dirName){
 					if(fileStat.st_mode & S_ISVTX)
 				    	perm[9] = fileStat.st_mode & 0100 ? 't' : 'T';
 					printf("%s",perm);
-					// printf( (S_ISDIR(fileStat.st_mode)) ? "d" : (S_ISLNK(fileStat.st_mode) ? "l" : (S_ISCHR(fileStat.st_mode) ? "c" : (S_ISBLK(fileStat.st_mode) ? "b" : (S_ISFIFO(fileStat.st_mode) ? "p" : (S_ISSOCK(fileStat.st_mode) ? "s" : "-"))))));
-				 //    printf( (fileStat.st_mode & S_IRUSR) ? "r" : "-");
-				 //    printf( (fileStat.st_mode & S_IWUSR) ? "w" : "-");
-				 //    if (fileStat.st_mode & S_ISUID)
-				 //    	printf((fileStat.st_mode & 0100 ? "s": "S"));
-				 //    else
-				 //    	 printf( (fileStat.st_mode & S_IXUSR) ? "x" : "-");
-				 //    printf( (fileStat.st_mode & S_IRGRP) ? "r" : "-");
-				 //    printf( (fileStat.st_mode & S_IWGRP) ? "w" : "-");
-				 //    if(fileStat.st_mode & S_ISGID)
-				 //    	printf( fileStat.st_mode & 0010 ? "s" : "l");
-				 //    else
-				 //    	printf( (fileStat.st_mode & S_IXGRP) ? "x" : "-");
-				 //    printf( (fileStat.st_mode & S_IROTH) ? "r" : "-");
-				 //    printf( (fileStat.st_mode & S_IWOTH) ? "w" : "-");
-				 //    if(fileStat.st_mode & S_ISVTX)
-				 //    	printf( (fileStat.st_mode & 0100 ? "t": "T"));
-				 //    else
-				 //    	printf( (fileStat.st_mode & S_IXOTH) ? "x" : "-");
 				    //Number of links
 				   	printf("\t%ld",fileStat.st_nlink);
 				   	// Owner of file
