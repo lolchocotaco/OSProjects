@@ -14,9 +14,9 @@
 #include <sys/types.h>     /* defines types used by sys/stat.h */
 #include <sys/stat.h>      /* defines S_IREAD & S_IWRITE  */
 #include <dirent.h>
-#include <limits.h> 		/*defints PATHMAX */
+#include <limits.h> 		/*defines PATH_MAX */
 #include <pwd.h>
-#include <time.h>
+#include <time.h>	
 #include <grp.h>
 extern int errno;
 
@@ -26,24 +26,22 @@ int uid = 0;
 int mTime = 0;
 time_t currentTime;
 int powOne = 1;
-
+static char *rwx[8] ={"---", "--x", "-w-", "-wx","r--", "r-x", "rw-", "rwx"};
 
 void listFiles(char* dirName){
 	DIR * dp; //Directory Pointer
 	struct dirent *sp; //Directory Structure pointer
-	char * d_name;
 	struct stat fileStat; // Struture to hold file stats
 
 	dp = opendir(dirName);
 	if(dp != NULL){
 		while(sp = readdir(dp)){
-			d_name = sp->d_name;
 			if(strcmp(sp->d_name, "..") != 0 && strcmp(sp->d_name,".") != 0){
 				int path_length;
 				char path[PATH_MAX];
 				path_length = snprintf(path, PATH_MAX,"%s/%s",dirName,sp->d_name);
 				// Displaying stats
-				if(stat(path,&fileStat)>=0){
+				if(lstat(path,&fileStat)>=0){
 					if(uflag && fileStat.st_uid != uid)
 						continue;
 					if(mflag && powOne*(currentTime - fileStat.st_mtime) < mTime)
@@ -52,20 +50,41 @@ void listFiles(char* dirName){
 					struct passwd * ownerInfo;
 					struct group * groupInfo;
 					char mTime[20];
+					char perm[11];
 
 					// Device and iNode Number
 					printf("%ld/%lu\t",fileStat.st_dev,fileStat.st_ino);
 					// Permissions (bitwise checks)
-					printf( (S_ISDIR(fileStat.st_mode)) ? "d" : "-");
-				    printf( (fileStat.st_mode & S_IRUSR) ? "r" : "-");
-				    printf( (fileStat.st_mode & S_IWUSR) ? "w" : "-");
-				    printf( (fileStat.st_mode & S_IXUSR) ? "x" : "-");
-				    printf( (fileStat.st_mode & S_IRGRP) ? "r" : "-");
-				    printf( (fileStat.st_mode & S_IWGRP) ? "w" : "-");
-				    printf( (fileStat.st_mode & S_IXGRP) ? "x" : "-");
-				    printf( (fileStat.st_mode & S_IROTH) ? "r" : "-");
-				    printf( (fileStat.st_mode & S_IWOTH) ? "w" : "-");
-				    printf( (fileStat.st_mode & S_IXOTH) ? "x" : "-");
+					perm[0]=  (S_ISDIR(fileStat.st_mode)) ? 'd' : (S_ISLNK(fileStat.st_mode) ? 'l' : (S_ISCHR(fileStat.st_mode) ? 'c' : (S_ISBLK(fileStat.st_mode) ? 'b' : (S_ISFIFO(fileStat.st_mode) ? 'p' : (S_ISSOCK(fileStat.st_mode) ? 's' : '-')))));
+ 					strcpy(&perm[1], rwx[(fileStat.st_mode >> 6)& 7]);
+ 					strcpy(&perm[4], rwx[(fileStat.st_mode >> 3)& 7]);
+ 					strcpy(&perm[7], rwx[(fileStat.st_mode & 7)]);
+ 					if (fileStat.st_mode & S_ISUID)
+				    	perm[3] = fileStat.st_mode & 0100 ? 's' : 'S';
+					if(fileStat.st_mode & S_ISGID)	
+				    	perm[6] = fileStat.st_mode & 0010 ? 's' : 'l';
+					if(fileStat.st_mode & S_ISVTX)
+				    	perm[9] = fileStat.st_mode & 0100 ? 't' : 'T';
+					printf("%s",perm);
+					// printf( (S_ISDIR(fileStat.st_mode)) ? "d" : (S_ISLNK(fileStat.st_mode) ? "l" : (S_ISCHR(fileStat.st_mode) ? "c" : (S_ISBLK(fileStat.st_mode) ? "b" : (S_ISFIFO(fileStat.st_mode) ? "p" : (S_ISSOCK(fileStat.st_mode) ? "s" : "-"))))));
+				 //    printf( (fileStat.st_mode & S_IRUSR) ? "r" : "-");
+				 //    printf( (fileStat.st_mode & S_IWUSR) ? "w" : "-");
+				 //    if (fileStat.st_mode & S_ISUID)
+				 //    	printf((fileStat.st_mode & 0100 ? "s": "S"));
+				 //    else
+				 //    	 printf( (fileStat.st_mode & S_IXUSR) ? "x" : "-");
+				 //    printf( (fileStat.st_mode & S_IRGRP) ? "r" : "-");
+				 //    printf( (fileStat.st_mode & S_IWGRP) ? "w" : "-");
+				 //    if(fileStat.st_mode & S_ISGID)
+				 //    	printf( fileStat.st_mode & 0010 ? "s" : "l");
+				 //    else
+				 //    	printf( (fileStat.st_mode & S_IXGRP) ? "x" : "-");
+				 //    printf( (fileStat.st_mode & S_IROTH) ? "r" : "-");
+				 //    printf( (fileStat.st_mode & S_IWOTH) ? "w" : "-");
+				 //    if(fileStat.st_mode & S_ISVTX)
+				 //    	printf( (fileStat.st_mode & 0100 ? "t": "T"));
+				 //    else
+				 //    	printf( (fileStat.st_mode & S_IXOTH) ? "x" : "-");
 				    //Number of links
 				   	printf("\t%ld",fileStat.st_nlink);
 				   	// Owner of file
@@ -87,7 +106,14 @@ void listFiles(char* dirName){
 				   	strftime(mTime,20,"%b %d %Y %H:%M",localtime(&fileStat.st_mtime));
 				   	printf("\t%s",mTime);
 				   	//File Name
-				   	printf("\t%s\n",path);
+				   	printf("\t%s",path);
+				   	if(S_ISLNK(fileStat.st_mode)){
+				   		char linkPath[PATH_MAX+1];
+				   		readlink(path,linkPath,PATH_MAX);
+				   		printf(" -> %s",linkPath);
+				   	}
+				   	printf("\n");
+
 				} else{ // Throw error and continue listing others
 					fprintf(stderr,"Error with %s: %s",path,strerror(errno));
 				}
@@ -100,7 +126,8 @@ void listFiles(char* dirName){
 					}
 					listFiles(path);
 				}
-			}			
+			}
+		errno = 0;			
 		}
 		if(closedir(dp)){
 			fprintf(stderr,"Error closing '%s' : %s\n",dirName,strerror(errno));
