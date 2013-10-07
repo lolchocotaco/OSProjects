@@ -112,9 +112,12 @@ void listFiles(char* dirName){
 			}
 		errno = 0;			
 		}
+		if(errno != 0){
+			fprintf(stderr,"Error reading %s: %s\n", dirName,strerror(errno));
+		}
 		if(closedir(dp)){
 			fprintf(stderr,"Error closing '%s' : %s\n",dirName,strerror(errno));
-			return;
+			exit(1);
 		}
 	}else{
 		fprintf(stderr,"Could not open directory '%s': %s\n", dirName, strerror(errno));
