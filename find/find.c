@@ -20,13 +20,14 @@
 #include <grp.h>
 extern int errno;
 
+static char *rwx[8] ={"---", "--x", "-w-", "-wx","r--", "r-x", "rw-", "rwx"};
 int uflag = 0;
 int mflag = 0;
 int uid = 0;
 int mTime = 0;
 time_t currentTime;
 int powOne = 1;
-static char *rwx[8] ={"---", "--x", "-w-", "-wx","r--", "r-x", "rw-", "rwx"};
+
 
 void listFiles(char* dirName){
 	DIR * dp; //Directory Pointer
@@ -97,6 +98,7 @@ void listFiles(char* dirName){
 
 				} else{ // Throw error and continue listing others
 					fprintf(stderr,"Error with %s: %s",path,strerror(errno));
+					return;
 				}
 
 				if(sp->d_type == DT_DIR){
@@ -112,16 +114,13 @@ void listFiles(char* dirName){
 		}
 		if(closedir(dp)){
 			fprintf(stderr,"Error closing '%s' : %s\n",dirName,strerror(errno));
-			exit(1);
+			return;
 		}
 	}else{
 		fprintf(stderr,"Could not open directory '%s': %s\n", dirName, strerror(errno));
-		exit(1);
+		return;
 	}
-
 }
-
-
 
 int main (int argc, char **argv){
 	int index;
