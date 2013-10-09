@@ -155,7 +155,7 @@ int main (int argc, char **argv){
 			  break;
 			case 'm':
 			  mflag = 1;
-			  if(isdigit(optarg[0]) || optarg[0] == '-' ){
+			  if(isdigit(optarg[0]) || (optarg[0] == '-' && isdigit(optarg[1]) )){
 			  	mTime = atoi(optarg);
 			  	if(mTime <0)
 			  		powOne = -1;
