@@ -56,7 +56,12 @@ void listFiles(char* dirName){
 					// Device and iNode Number
 					printf("%ld/%lu ",fileStat.st_dev,fileStat.st_ino);
 					// Permissions (bitwise checks)
-					perm[0]=  (S_ISDIR(fileStat.st_mode)) ? 'd' : (S_ISLNK(fileStat.st_mode) ? 'l' : (S_ISCHR(fileStat.st_mode) ? 'c' : (S_ISBLK(fileStat.st_mode) ? 'b' : (S_ISFIFO(fileStat.st_mode) ? 'p' : (S_ISSOCK(fileStat.st_mode) ? 's' : '-')))));
+					perm[0] =   (S_ISDIR(fileStat.st_mode)) ? 'd' : 
+								(S_ISLNK(fileStat.st_mode) ? 'l' : 
+								(S_ISCHR(fileStat.st_mode) ? 'c' : 
+								(S_ISBLK(fileStat.st_mode) ? 'b' : 
+								(S_ISFIFO(fileStat.st_mode) ? 'p' : 
+								(S_ISSOCK(fileStat.st_mode) ? 's' : '-')))));
  					strcpy(&perm[1], rwx[(fileStat.st_mode >> 6)& 7]);
  					strcpy(&perm[4], rwx[(fileStat.st_mode >> 3)& 7]);
  					strcpy(&perm[7], rwx[(fileStat.st_mode & 7)]);
