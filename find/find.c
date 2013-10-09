@@ -54,7 +54,7 @@ void listFiles(char* dirName){
 					char perm[11];
 
 					// Device and iNode Number
-					printf("%ld/%lu\t",fileStat.st_dev,fileStat.st_ino);
+					printf("%ld/%lu ",fileStat.st_dev,fileStat.st_ino);
 					// Permissions (bitwise checks)
 					perm[0]=  (S_ISDIR(fileStat.st_mode)) ? 'd' : (S_ISLNK(fileStat.st_mode) ? 'l' : (S_ISCHR(fileStat.st_mode) ? 'c' : (S_ISBLK(fileStat.st_mode) ? 'b' : (S_ISFIFO(fileStat.st_mode) ? 'p' : (S_ISSOCK(fileStat.st_mode) ? 's' : '-')))));
  					strcpy(&perm[1], rwx[(fileStat.st_mode >> 6)& 7]);
@@ -66,29 +66,29 @@ void listFiles(char* dirName){
 				    	perm[6] = fileStat.st_mode & 0010 ? 's' : 'l';
 					if(fileStat.st_mode & S_ISVTX)
 				    	perm[9] = fileStat.st_mode & 0100 ? 't' : 'T';
-					printf("%s",perm);
+					printf("  %s",perm);
 				    //Number of links
-				   	printf("\t%ld",fileStat.st_nlink);
+				   	printf(" %ld",fileStat.st_nlink);
 				   	// Owner of file
 				   	if( (ownerInfo = getpwuid(fileStat.st_uid) )!= NULL)
-				   		printf("\t%s",ownerInfo->pw_name);
+				   		printf("  %s",ownerInfo->pw_name);
 				   	else
-				   		printf("\t%d",fileStat.st_uid);
+				   		printf(" %d",fileStat.st_uid);
 				   	// Group of file
 				   	if( (groupInfo = getgrgid(fileStat.st_gid) ) !=NULL)
-				   		printf("\t%s",groupInfo->gr_name);
+				   		printf(" %s",groupInfo->gr_name);
 				   	else
-				   		printf("\t%d",fileStat.st_gid);
+				   		printf(" %d",fileStat.st_gid);
 				   	// Size of file
 				   	if(sp->d_type == DT_BLK || sp->d_type == DT_CHR)
-				   		printf("\t0x%x",(unsigned int)fileStat.st_rdev);
+				   		printf("  0x%x",(unsigned int)fileStat.st_rdev);
 				   	else
-				   		printf("\t%ld", fileStat.st_size);
+				   		printf("  %ld", fileStat.st_size);
 				   	// Last Modified
 				   	strftime(mTime,20,"%b %d %Y %H:%M",localtime(&fileStat.st_mtime));
 				   	printf("\t%s",mTime);
 				   	//File Name
-				   	printf("\t%s",path);
+				   	printf("  %s",path);
 				   	if(S_ISLNK(fileStat.st_mode)){
 				   		char linkPath[PATH_MAX+1];
 				   		readlink(path,linkPath,PATH_MAX);
@@ -107,6 +107,7 @@ void listFiles(char* dirName){
 						fprintf(stderr,"Path Length is too long. \n");
 						exit(1);
 					}
+					// Recursively call listFiles
 					listFiles(path);
 				}
 			}
@@ -178,6 +179,7 @@ int main (int argc, char **argv){
 		 }
 	}
 
+	//If no directory then do find on current directory. 
 	if(optind == argc){
 		dirName = ".";
 	} else{
