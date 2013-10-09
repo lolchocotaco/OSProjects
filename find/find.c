@@ -81,7 +81,7 @@ void listFiles(char* dirName){
 				   		printf("\t%d",fileStat.st_gid);
 				   	// Size of file
 				   	if(sp->d_type == DT_BLK || sp->d_type == DT_CHR)
-				   		printf("\t0x%x",(unsigned int)fileStat.st_size);
+				   		printf("\t0x%x",(unsigned int)fileStat.st_rdev);
 				   	else
 				   		printf("\t%ld", fileStat.st_size);
 				   	// Last Modified
