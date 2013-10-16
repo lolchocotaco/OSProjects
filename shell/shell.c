@@ -16,7 +16,7 @@
 #include <dirent.h>
 #include <limits.h> 		/*defines PATH_MAX */
 #include <pwd.h>
-#include <time.h>	
+#include <sys/times.h>	
 #include <grp.h>
 extern int errno;
 
@@ -29,6 +29,10 @@ int main(int argc, char *argv[]) {
   char line[MAX_LENGTH];
   int pid, status, done, count;
   char *cmdList[MAX_LENGTH];
+  int ofd,ifd;
+  char *fileName;
+  struct tms tmsstart, tmsend;
+  clock_t cstart,cend;
 
 
 // line = line of input
@@ -53,7 +57,7 @@ int main(int argc, char *argv[]) {
 
 
       // First condition is if cd is called. Make it work with exec
-      if (strcmp(cmd, "cd") == 0) {
+      if (strcmp(cmd, "cd1") == 0) {
         cmdArg = strtok(0, DELIMS);
 
         if (!cmdArg) 
@@ -67,31 +71,40 @@ int main(int argc, char *argv[]) {
       ///CD Nonsense
       
       else {
-      	printf("Command %s\n", cmd);
+      	printf("Executing command %s with arguments", cmd);
       	count = 1;
       	while(cmdArg = strtok(0,DELIMS)){
+      		if(cmdArg[0]=='>'||cmdArg[0] =='<'){
+      			fileName = malloc(strlen(cmdArg));
+      			memcpy(fileName, &cmdArg[1],strlen(cmdArg)-1);
+      			printf("Need to pipe: %s\n",fileName);
+      		}
+      		printf(" '%s'",cmdArg);
       		cmdList[count] = cmdArg;
       		count++;
       	}
+      	printf("\n");
       	cmdList[count] = NULL;
-      	// char *argvv[] = {cmd, "-l", NULL};
       	switch(pid = fork()){
       		case -1:
-      			perror("Failed to create fork: ");
+      			perror("Failed to create fork ");
       			exit(-1);
-      		case 0:
+      		case 0: //Child process
+      			cstart = times(&tmsstart);
       			if(execvp(cmdList[0],cmdList) <0){
-      				perror("Failed to exec: ");
+      				perror("Failed to exec ");
       				exit(-1);
       			}
-      		default:
+      			cend = times(&tmsend);
+      		default: //Parent process
       			done = wait(&status);
+      			printf("Command returned with return code %d,\n",status);
+      			printf("consuming %.3f\n",cstart);
       	}
       }
       
-
       if (errno) 
-      	perror("Command failed: ");
+      	perror("Command failed ");
     }
   }
 
