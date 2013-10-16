@@ -25,46 +25,73 @@ extern int errno;
 
 int main(int argc, char *argv[]) {
   char *cmd;
+  char *cmdArg;
   char line[MAX_LENGTH];
-  int pid;
-  int status;
+  int pid, status, done, count;
+  char *cmdList[MAX_LENGTH];
+
+
+// line = line of input
+// cmd = name of cmd 
+// cmdArg = arguments of cmd
+// cmdList = array to passed into Exec (reset everytime)
 
   while (1) {
-    printf("$ ");
-    if (!fgets(line, MAX_LENGTH, stdin)) break;
+  	//Clear cmdList at each command
+  	memset(&cmdList[0], 0, sizeof(cmdList));
 
-    // Parse and execute command
+    printf("mysh> ");
+    //Read input
+    if (!fgets(line, MAX_LENGTH, stdin)) 
+    	break;
+
+    // Get parameter stuff
+
     if ((cmd = strtok(line, DELIMS))) {
-      // Clear errors
       errno = 0;
+      cmdList[0] = cmd;
 
+
+      // First condition is if cd is called. Make it work with exec
       if (strcmp(cmd, "cd") == 0) {
-        char *arg = strtok(0, DELIMS);
+        cmdArg = strtok(0, DELIMS);
 
-        if (!arg) fprintf(stderr, "cd missing argument.\n");
-        else chdir(arg);
-
-      } else if (strcmp(cmd, "exit") == 0) {
+        if (!cmdArg) 
+        	fprintf(stderr, "cd missing argument.\n");
+        else 
+        	chdir(cmdArg);
+      } 
+      else if (strcmp(cmd, "exit") == 0) {
         break;
-      } else {
-      	printf("You want to run command %s\n", line);
+      } 
+      ///CD Nonsense
+      
+      else {
+      	printf("Command %s\n", cmd);
+      	count = 1;
+      	while(cmdArg = strtok(0,DELIMS)){
+      		cmdList[count] = cmdArg;
+      		count++;
+      	}
+      	cmdList[count] = NULL;
+      	// char *argvv[] = {cmd, "-l", NULL};
       	switch(pid = fork()){
       		case -1:
       			perror("Failed to create fork: ");
-      			exit(1);
+      			exit(-1);
       		case 0:
-      			if(execvp(argv[0],&argv[0]) <0){
+      			if(execvp(cmdList[0],cmdList) <0){
       				perror("Failed to exec: ");
-      				exit(1);
+      				exit(-1);
       			}
       		default:
-      			wait(&status);
-      			printf("I'm the parent\n");
+      			done = wait(&status);
       	}
       }
       
 
-      if (errno) perror("Command failed");
+      if (errno) 
+      	perror("Command failed: ");
     }
   }
 
