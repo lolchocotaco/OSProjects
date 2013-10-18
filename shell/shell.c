@@ -27,30 +27,6 @@
 #define DELIMS " \t\r\n"
 
 
-void doCmd(char* line){
-	char *cmd;
-	char *cmdArg;
-	char *cmdList[MAX_LENGTH];
-	if ((cmd = strtok(line, DELIMS))) {
-      errno = 0;
-      cmdList[0] = cmd;
-      if (strcmp(cmd, "cd") == 0) {
-        cmdArg = strtok(0, DELIMS);
-
-        if (!cmdArg) 
-        	fprintf(stderr, "cd missing argument.\n");
-        else 
-        	chdir(cmdArg);
-      } 
-      else {
-        printf("%s\n",line);
-      } 
-	}
-
-}
-
-
-
 
 
 
@@ -66,35 +42,20 @@ int main(int argc, char *argv[]) {
   pid_t cpid;
   int  cstart, cend;
   char *split;
-  FILE* inFile;
+  FILE* inFile,input;
 
 
-	int bufferSize = 1024;  // Default buffer size
-	char* bufferPtr = NULL;
-
-	if(argc> 1){
-		if((inFile = fopen(argv[1],"r") ) != NULL){
-			while(fgets(line,sizeof(line),inFile) != NULL){
-				if(line[0] != '#'){
-					doCmd(line);
-				}
-			}
-			fclose(inFile);
-		}	
-		else{
-			perror("Open failed ");
-		}
-	}
+if(argc> 1){
+	if((inFile = fopen(argv[1],"r") ) != NULL){
+		input = inFile;
+	}	
 	else{
-		while(1){
-			printf("mysh> ");
-			if(fgets(line, MAX_LENGTH,stdin) != NULL){
-				doCmd(line);
-			} 
-			else
-				break;
-		}
+		perror("Open failed ");
+		exit(1);
 	}
+} else{
+	input = stdin;
+}
 
 // line = line of input
 // cmd = name of cmd 
