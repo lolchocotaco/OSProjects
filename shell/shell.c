@@ -28,8 +28,6 @@
 
 
 
-
-
 int main(int argc, char *argv[]) {
   char *cmd;
   char *cmdArg;
@@ -42,9 +40,11 @@ int main(int argc, char *argv[]) {
   pid_t cpid;
   int  cstart, cend;
   char *split;
-  FILE* inFile,input;
+  FILE* inFile = NULL;
+  FILE* input = NULL;
 
 
+//If there is an argument, open up that file for reading
 if(argc> 1){
 	if((inFile = fopen(argv[1],"r") ) != NULL){
 		input = inFile;
@@ -61,18 +61,22 @@ if(argc> 1){
 // cmd = name of cmd 
 // cmdArg = arguments of cmd
 // cmdList = array to passed into Exec (reset everytime)
-
+printf("mysh> ");
   while (1) {
+
+    //Read input (if there is nothing, break to end program)
+    if (!fgets(line, MAX_LENGTH, input)) {
+    	printf("\n");
+    	break;
+    }
+    //If there is a comment move on. 
+    if(line[0] == '#'){
+    	continue;
+    }
   	//Clear cmdList at each command
   	memset(&cmdList[0], 0, sizeof(cmdList));
 
-    printf("mysh> ");
-    //Read input
-    if (!fgets(line, MAX_LENGTH, stdin)) 
-    	break;
-
     // Get parameter stuff
-
     if ((cmd = strtok(line, DELIMS))) {
       errno = 0;
       cmdList[0] = cmd;
@@ -91,7 +95,6 @@ if(argc> 1){
         break;
       } 
       ///CD Nonsense
-      
       else {
       	printf("Executing command %s with arguments", cmd);
       	count = 1;
@@ -134,6 +137,7 @@ if(argc> 1){
       if (errno) 
       	perror("Command failed ");
     }
+    printf("mysh> ");
   }
 
   return 0;

@@ -1,5 +1,5 @@
-ls
+#ls
 #Comment
 ls /dev
 #comment
-ls -l
+#ls -l
