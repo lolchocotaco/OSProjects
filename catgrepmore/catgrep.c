@@ -13,13 +13,15 @@
 #include <fcntl.h>         /* defines options flags */
 #include <sys/types.h>     /* defines types used by sys/stat.h */
 #include <sys/stat.h>      /* defines S_IREAD & S_IWRITE  */
+#include <signal.h>
 
 extern int errno;
 
-int writeSize;
-int bufferSize = 1024;  // Default buffer size
-char* bufferPtr = NULL;
 
+void int_handler(int sig){
+	fprintf(stderr,"Signal received: %d\n",sig);
+	exit(2);
+}
 
 
 int main (int argc, char **argv){
@@ -36,10 +38,15 @@ int main (int argc, char **argv){
 
 	//File Descriptors
 	int inFile;
-
+	int fds[2];
 	char* grepCmd[4] = {"grep",argv[1],NULL,NULL};
-
 	printf("inputfiles: \n");
+
+	if (pipe(fds)<0){
+		perror("Can't create pipe");
+		return -1;
+	}
+
 	for(index = 2; index<argc; index++){
 		printf("Grepping %s with pattern: %s\n",argv[index],argv[1]);
 		grepCmd[2] = argv[index];
@@ -54,23 +61,41 @@ int main (int argc, char **argv){
 				break; 
 			case 0: //Child process
 				printf("in the child\n");
+				close(fds[0]); //Close unused read end;
+				if(dup2(fds[1],1)<0){
+					fprintf(stderr,"Cannot dup stdout to pipe fds[1]",strerror(errno));
+					exit(-1);
+				}
+				close(fds[1]);
+				execvp(grepCmd[0],grepCmd);
+				
 				break;
 			default: //Parent process
-				printf("In the parent\n");
+				printf("In the parent of of grep\n");
 				break;
 
 		}
-
+		
 		switch ((morePid = fork())){
 			case -1:
 				perror("Failed to create fork ");
 				exit(-1);
 				break; 
 			case 0: //Child process
+				signal(SIGINT,int_handler);
 				printf("in the child\n");
+				close(fds[1]); // Close unused write end. 
+				if(dup2(fds[0],0)<0) {
+					fprintf(stderr,"Cannot dup stdin to pipe fds[0]",strerror(errno));
+					exit(-1);
+				}
+				close(fds[0]); 
+				execlp("pg","pg",NULL);
+
+				//tell more to read fd[0]
 				break;
 			default: //Parent process
-				printf("In the parent\n");
+				printf("In the parent of more\n");
 				break;
 		}
 	}
