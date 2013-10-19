@@ -27,6 +27,7 @@
 #define DELIMS " \t\r\n"
 #define DELIMS2 " \t\r\n<>"
 
+// Redirect fName to stdFD using options
 void redirect(char *fName, int stdFD, int options	){
 	int fd;
 	char* fileName  = strtok(fName,"<>");
@@ -37,6 +38,7 @@ void redirect(char *fName, int stdFD, int options	){
 	}
 	if(dup2(fd,stdFD)<0){
 		fprintf(stderr,"Cannot dup %s to %d: %s",fileName,stdFD,strerror(errno));
+		exit(1);
 	}
 	close(fd);
 }
@@ -60,7 +62,7 @@ int main(int argc, char *argv[]) {
 	int isRedirect = 0;
 
 
-//If there is an argument, open up that file for reading
+	//If there is an argument, open up that file for reading
 	if(argc> 1){
 		if((input = fopen(argv[1],"r") ) == NULL){
 			perror("Open failed ");
@@ -74,7 +76,7 @@ int main(int argc, char *argv[]) {
 	// cmd = name of cmd 
 	// cmdArg = arguments of cmd
 	// cmdList = array to passed into Exec (reset everytime)
-	printf("mysh> ");
+	printf("mysh $> ");
 	while (1) {
 		//Reset at each loop though
 		errno = 0;
@@ -98,7 +100,7 @@ int main(int argc, char *argv[]) {
 		  errno = 0;
 		  cmdList[0] = cmd;
 
-			printf("Executing command %s with arguments", cmd);
+			fprintf(stderr,"Executing command %s with arguments", cmd);
 			count = 1;
 			while(cmdArg = strtok_r(0,DELIMS,&p)){
 				// Check if argument is for redirection
@@ -135,13 +137,13 @@ int main(int argc, char *argv[]) {
 					}
 				}
 				else{
-			  		printf(" '%s'",cmdArg);
+			  		fprintf(stderr," '%s'",cmdArg);
 			  		cmdList[count] = cmdArg;
 			  		count++;
 				}
 				
 			}
-			printf("\n");
+			fprintf(stderr,"\n");
 			cmdList[count] = NULL;
 
 			switch(pid = fork()){
@@ -157,7 +159,7 @@ int main(int argc, char *argv[]) {
 
 					if(execvp(cmdList[0],cmdList) <0){
 						perror("Failed to exec ");
-						exit(-1);
+						exit(1);
 					}
 					cend = clock();
 					break;
@@ -175,12 +177,10 @@ int main(int argc, char *argv[]) {
 					}
 					break;
 				}
-		  
-		  
 		  if (errno) 
-		  	perror("Command failed ");
+		  	fprintf(stderr,"Command failed %s: %s\n",cmdArg,strerror(errno));
 		}
-		printf("mysh> ");
+		printf("mysh $> ");
 	}
 
   return 0;
