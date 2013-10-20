@@ -1,0 +1,22 @@
+total 176
+-rw-r--r-- 1 sameer sameer     89 Oct 18 19:18 input.py
+-rw-r--r-- 1 sameer sameer     11 Oct 18 18:31 input.txt
+-rw-r--r-- 1 sameer sameer 114670 Oct 16 16:19 lecture-w03.ps
+drwxr-xr-x 2 sameer sameer   4096 Oct 16 12:13 lol
+-rw------- 1 sameer sameer      0 Oct 18 20:49 ls.out
+-rw-r--r-- 1 sameer sameer     26 Oct 15 19:32 Makefile
+-rwxr-xr-x 1 sameer sameer  13923 Oct 18 20:48 mysh
+-rw-r--r-- 1 sameer sameer  11034 Oct 15 17:59 pset-w03.ps
+-rw-r--r-- 1 sameer sameer   4195 Oct 18 20:48 shell.c
+-rw-r--r-- 1 sameer sameer     37 Oct 18 15:18 test.txt
+total 180
+-rw-r--r-- 1 sameer sameer     89 Oct 18 19:18 input.py
+-rw-r--r-- 1 sameer sameer     11 Oct 18 18:31 input.txt
+-rw-r--r-- 1 sameer sameer 114670 Oct 16 16:19 lecture-w03.ps
+drwxr-xr-x 2 sameer sameer   4096 Oct 16 12:13 lol
+-rw------- 1 sameer sameer    568 Oct 18 20:49 ls.out
+-rw-r--r-- 1 sameer sameer     26 Oct 15 19:32 Makefile
+-rwxr-xr-x 1 sameer sameer  13923 Oct 18 20:48 mysh
+-rw-r--r-- 1 sameer sameer  11034 Oct 15 17:59 pset-w03.ps
+-rw-r--r-- 1 sameer sameer   4195 Oct 18 20:48 shell.c
+-rw-r--r-- 1 sameer sameer     37 Oct 18 15:18 test.txt
