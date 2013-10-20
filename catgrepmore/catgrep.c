@@ -13,15 +13,16 @@
 #include <sys/stat.h> 
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/ioctl.h>
 #include <signal.h>
 
 #define BUFFER_SIZE 16384
 
 int numFiles = 0;
-
+int bytesWritten = 0;
 void int_handler(int sig){
 	fprintf(stderr,"\n\nProcess interrupted\n");
-	fprintf(stderr,"Files processed: %d\n",numFiles);
+	fprintf(stderr,"Files processed: %d with %d bytes\n",numFiles,bytesWritten);
 	exit(-1);
 }
 	
@@ -37,7 +38,7 @@ int main (int argc, char **argv){
 
 	int index,grepPid,morePid,status;
 
-
+	int bytesAvailable,err;
 
 	//File Descriptors
 	int inFile;
@@ -86,6 +87,7 @@ int main (int argc, char **argv){
 				break; 
 			case 0: //Child process
 				close(fds[1]); // Close unused write end. 
+
 				if(dup2(fds[0],0)<0) {
 					fprintf(stderr,"Cannot dup stdin to pipe fds[0]\n",strerror(errno));
 					exit(-1);
@@ -93,6 +95,11 @@ int main (int argc, char **argv){
 				execlp("more","more",NULL);
 				break;
 			default: //Parent process
+				if( (ioctl(fds[0], FIONREAD, &bytesAvailable))<0){
+					perror("Error with pipe ");
+					return -1;
+				}
+				bytesWritten = bytesWritten + bytesAvailable;
 				waitpid(morePid,&status,0);
 				close(fds[0]);
 				break;
