@@ -47,7 +47,7 @@ int main (int argc, char **argv){
 				
 
 	for(index = 2; index<argc; index++){
-		printf("Grepping %d out of %d %s with pattern: %s\n",index+1,argc,argv[index],argv[1]);
+		printf("Grepping %d out of %d '%s' with pattern: '%s'\n",index-1,argc-2,argv[index],argv[1]);
 		grepCmd[2] = argv[index];
 		// if( (inFile = open(argv[index], O_RDONLY, 0666))<0){
 		// 	fprintf(stderr,"Error occured while opening %s: %s\n", argv[index], strerror(errno));
