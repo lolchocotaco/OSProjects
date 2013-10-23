@@ -85,12 +85,18 @@ int main (int argc, char **argv){
 					fprintf(stderr,"Cannot dup stdin to pipe fds[0]\n",strerror(errno));
 					exit(-1);
 				}
+
+				if (close(grepfds[0]) ||  close(morefds[1]) ){
+					perror("Cannot close pipes ");
+					exit(-1);
+				}
+
 				printf("doing grep");
 				execvp(grepCmd[0],grepCmd);
 				break;
 			default: //Parent process
 				//Close unused pipes
-				if( close(grepfds[0])<0){
+				if( close(grepfds[0])<0 || close(morefds[1])< 0){
 					perror("Error closing pipe: ");
 					exit(-1);
 				}
@@ -114,38 +120,37 @@ int main (int argc, char **argv){
 					perror("Error closing pipe: ");
 					exit(-1);
 				}
-				waitpid(grepPid,&status,0);
-				if(close(morefds[1])< 0 || close(inFile)){
-					perror("Error closing fd:");
-					exit(-1);
-				}
 
 				numFiles++;
+
+				switch((morePid = fork())){
+					case -1:
+						perror("Failed to create fork ");
+						exit(-1);
+						break; 
+					case 0: //Child process
+						if (close(grepfds[0]) ){
+							perror("Cannot close pipes ");
+							exit(-1);
+						}
+						if(dup2(morefds[0],0)<0){
+							fprintf(stderr,"Cannot dup to grepfds\n",strerror(errno));
+							exit(-1);
+						}
+						execlp("more","more",NULL);
+						break;
+					default: //Parent process
+						if(close(morefds[0]) <0 ){
+							perror("Error closing pipe: ");
+							exit(-1);
+						}
+						waitpid(morePid,&status,0);
+						break;
+				}
+
+				waitpid(grepPid,&status,0);				
 				break;
 		}
-
-		switch((morePid = fork())){
-			case -1:
-				perror("Failed to create fork ");
-				exit(-1);
-				break; 
-			case 0: //Child process
-				if(dup2(morefds[0],0)<0){
-					fprintf(stderr,"Cannot dup to grepfds\n",strerror(errno));
-					exit(-1);
-				}
-				execlp("more","more",NULL);
-				break;
-			default: //Parent process
-				waitpid(morePid,&status,0);
-				if(close(morefds[0]) <0 ){
-					perror("Error closing pipe: ");
-					exit(-1);
-				}
-				
-				break;
-		}
-
 	}
  return 0;
 }
