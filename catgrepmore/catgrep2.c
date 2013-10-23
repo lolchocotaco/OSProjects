@@ -71,9 +71,10 @@ int main (int argc, char **argv){
 				exit(-1);
 				break; 
 			case 0: //Child process
-				close(grepfds[1]);
-				close(morefds[0]);
-
+				if (close(grepfds[1]) ||  close(morefds[0]) ){
+					perror("Cannot close pipes ");
+					exit(-1);
+				}
 				// output grep to other pipe
 				if(dup2(morefds[1],1)<0){
 					fprintf(stderr,"Cannot dup stdin to pipe fds[0]\n",strerror(errno));
@@ -89,7 +90,10 @@ int main (int argc, char **argv){
 				break;
 			default: //Parent process
 				//Close unused pipes
-				close(grepfds[0]);
+				if( close(grepfds[0])<0){
+					perror("Error closing pipe: ");
+					exit(-1);
+				}
 				// Open up file for reading
 				if( (inFile = open(argv[index], O_RDONLY, S_IREAD | S_IWRITE))<0){
 					fprintf(stderr,"Error occured while opening %s: %s\n", argv[index], strerror(errno));
@@ -106,15 +110,19 @@ int main (int argc, char **argv){
     			if(writeSize == -1){
     				perror("Error occured while writing to pipe");
     			}
-				close(grepfds[1]);
+				if( close(grepfds[1])<0){
+					perror("Error closing pipe: ");
+					exit(-1);
+				}
 				waitpid(grepPid,&status,0);
-				close(morefds[1]);
-				close(inFile);
+				if(close(morefds[1])< 0 || close(inFile)){
+					perror("Error closing fd:");
+					exit(-1);
+				}
 
 				numFiles++;
 				break;
 		}
-
 
 		switch((morePid = fork())){
 			case -1:
@@ -122,7 +130,6 @@ int main (int argc, char **argv){
 				exit(-1);
 				break; 
 			case 0: //Child process
-				close(morefds[1]);
 				if(dup2(morefds[0],0)<0){
 					fprintf(stderr,"Cannot dup to grepfds\n",strerror(errno));
 					exit(-1);
@@ -131,7 +138,11 @@ int main (int argc, char **argv){
 				break;
 			default: //Parent process
 				waitpid(morePid,&status,0);
-				close(morefds[0]);
+				if(close(morefds[0]) <0 ){
+					perror("Error closing pipe: ");
+					exit(-1);
+				}
+				
 				break;
 		}
 
