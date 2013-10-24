@@ -71,7 +71,7 @@ int main (int argc, char **argv){
 				exit(-1);
 				break; 
 			case 0: //Child process
-				if (close(grepfds[1]) ||  close(morefds[0]) ){
+				if (close(grepfds[1]) <0||  close(morefds[0]) <0 ){
 					perror("Cannot close pipes ");
 					exit(-1);
 				}
@@ -86,50 +86,20 @@ int main (int argc, char **argv){
 					exit(-1);
 				}
 
-				if (close(grepfds[0]) ||  close(morefds[1]) ){
+				if (close(grepfds[0]) <0 ||  close(morefds[1]) <0){
 					perror("Cannot close pipes ");
 					exit(-1);
 				}
-
-				printf("doing grep");
 				execvp(grepCmd[0],grepCmd);
 				break;
 			default: //Parent process
-				//Close unused pipes
-				if( close(grepfds[0])<0 || close(morefds[1])< 0){
-					perror("Error closing pipe: ");
-					exit(-1);
-				}
-				// Open up file for reading
-				if( (inFile = open(argv[index], O_RDONLY, S_IREAD | S_IWRITE))<0){
-					fprintf(stderr,"Error occured while opening %s: %s\n", argv[index], strerror(errno));
-					return -1;
-				}
-				// Write to pipe
-				while((writeSize = read(inFile,bufferPtr,bufferSize)) > 0){
-					if( write(grepfds[1],bufferPtr,writeSize) != writeSize){
-      					perror("Error occured while writing to pipe (Partial Write)");
-      					exit(-1);
-    				}
-    				bytesWritten = bytesWritten + writeSize;
-    			}
-    			if(writeSize == -1){
-    				perror("Error occured while writing to pipe");
-    			}
-				if( close(grepfds[1])<0){
-					perror("Error closing pipe: ");
-					exit(-1);
-				}
-
-				numFiles++;
-
 				switch((morePid = fork())){
 					case -1:
 						perror("Failed to create fork ");
 						exit(-1);
 						break; 
 					case 0: //Child process
-						if (close(grepfds[0]) ){
+						if (close(grepfds[0]) <0 || close(morefds[1])<0 || close(grepfds[1])<0){
 							perror("Cannot close pipes ");
 							exit(-1);
 						}
@@ -137,13 +107,42 @@ int main (int argc, char **argv){
 							fprintf(stderr,"Cannot dup to grepfds\n",strerror(errno));
 							exit(-1);
 						}
+						if( close(morefds[0])<0){
+							perror("Cannot close pipes ");
+							exit(-1);	
+						}
 						execlp("more","more",NULL);
 						break;
 					default: //Parent process
-						if(close(morefds[0]) <0 ){
+						// close unused pipes
+						if(close(morefds[0]) <0 || close(grepfds[0])<0 || close(morefds[1])< 0){
 							perror("Error closing pipe: ");
 							exit(-1);
 						}
+
+						// Open up file for reading
+						if( (inFile = open(argv[index], O_RDONLY, S_IREAD | S_IWRITE))<0){
+							fprintf(stderr,"Error occured while opening %s: %s\n", argv[index], strerror(errno));
+							return -1;
+						}
+						// Write to pipe
+						while((writeSize = read(inFile,bufferPtr,bufferSize)) > 0){
+							if( write(grepfds[1],bufferPtr,writeSize) != writeSize){
+		      					perror("Error occured while writing to pipe (Partial Write)");
+		      					exit(-1);
+		    				}
+		    				bytesWritten = bytesWritten + writeSize;
+		    			}
+		    			if(writeSize == -1){
+		    				perror("Error occured while writing to pipe");
+		    				exit(-1);
+		    			}
+						if( close(grepfds[1])<0){
+							perror("Error closing pipe: ");
+							exit(-1);
+						}
+
+						numFiles++;
 						waitpid(morePid,&status,0);
 						break;
 				}
