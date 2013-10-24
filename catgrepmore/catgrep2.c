@@ -30,6 +30,10 @@ void int_handler(int sig){
 	fprintf(stderr,"Files processed: %d with %d bytes\n",numFiles,bytesWritten);
 	exit(-1);
 }
+void pipe_handler(int sig){
+	fprintf(stderr,"Broken Pipe\n");
+	exit(-1);
+}
 	
 int main (int argc, char **argv){
 
@@ -40,6 +44,7 @@ int main (int argc, char **argv){
 
 	// Handling interrupts
 	signal(SIGINT,int_handler);
+	signal(SIGPIPE,pipe_handler);
 
 	int index,grepPid,morePid,status;
 
