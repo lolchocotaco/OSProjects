@@ -19,6 +19,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
+#define PORT 8000
 
 int main (int argc, char **argv){
 	int isFile = 0;
@@ -54,12 +55,14 @@ int main (int argc, char **argv){
 	port = atoi(argv[2]); 		//Save port number
 
 
-	printf("Connecting to %s on port %d...\n",hostName,port);
 	// Setting up connection
+	printf("Connecting to %s on port %d...\n",hostName,port);
 	memset((char*)&server, 0, sizeof(server));
 	server.sin_family = AF_INET;
 	server.sin_port = htons(port);
 
+
+	// get proper host address
 	if(isdigit(hostName[0])){
 		inet_aton(hostName,&server.sin_addr);
 	} else{
@@ -70,6 +73,8 @@ int main (int argc, char **argv){
 		memcpy(&server.sin_addr, host->h_addr, sizeof(server.sin_addr));
 	}
 
+
+	//Connect to host
 	if( (connection = connect(client, (struct sockaddr *)&server, sizeof(server) )) <0){
 		perror("Could not connect to server: ");
 		exit(-1);
@@ -78,6 +83,7 @@ int main (int argc, char **argv){
 	}
 
 	byteSent = 0;
+	// Read from stdin and send to server
 	while (1) {
 		if (!fgets(line, 1024, stdin)) {
 			printf("Closing Connection..\n");
@@ -90,7 +96,7 @@ int main (int argc, char **argv){
 		byteSent += sendStat;
 
 	}
-	fprintf(stderr,"Sent %d bytes\n",byteSent);
+	fprintf(stderr,"Total bytes sent: %d \n",byteSent);
 	close(client);
 	return 0;
 }
