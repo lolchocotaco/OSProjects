@@ -15,28 +15,36 @@
 #include <fcntl.h>
 #include <string.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netdb.h>
 
 
 int main (int argc, char **argv){
 	int isFile = 0;
+	int inFile = -1;
+	char* fileName;
 
 	if(argc <3){
 		fprintf(stderr,"Please input the correct number of arguments\n");
 		exit(-1);
-	} else if(argc == 4){
-		isFile = 1;
-	}
+	} 
+
 
 	struct sockaddr_in server;
+	struct hostent *host;
 	char* hostName;
+	unsigned char **addrList;
 	int client;
 	int port;
 	int connection;
 	int sendStat;
-	char * text = "This is testing text\n";
+	int byteSent;
+	int i;
+	char line[1024];
 
 
+	// Create socket
 	if((client = socket(AF_INET,SOCK_STREAM,0)) < 0){
 		perror("Could not create TCP socket: ");
 		exit(-1);
@@ -45,10 +53,22 @@ int main (int argc, char **argv){
 	strcpy(hostName,argv[1]);   // Save hostName
 	port = atoi(argv[2]); 		//Save port number
 
-	printf("Connecting to %s on port %d...\n",hostName,port);
 
+	printf("Connecting to %s on port %d...\n",hostName,port);
+	// Setting up connection
+	memset((char*)&server, 0, sizeof(server));
 	server.sin_family = AF_INET;
 	server.sin_port = htons(port);
+
+	if(isdigit(hostName[0])){
+		inet_aton(hostName,&server.sin_addr);
+	} else{
+		if ( (host = gethostbyname(hostName)) == NULL) {
+			fprintf(stderr, "Could not lookup '%s': %s\n",hostName, strerror(h_errno));
+			exit(-1);
+		}
+		memcpy(&server.sin_addr, host->h_addr, sizeof(server.sin_addr));
+	}
 
 	if( (connection = connect(client, (struct sockaddr *)&server, sizeof(server) )) <0){
 		perror("Could not connect to server: ");
@@ -57,12 +77,20 @@ int main (int argc, char **argv){
 		printf("Connection succeeeded\n");
 	}
 
-	if ((sendStat = send(client,text,strlen(text),0)) <0){
-		perror("Sending failed");
-	} else{
-		printf("Sent %d bytes\n",sendStat);
-	}
-	close(client);
+	byteSent = 0;
+	while (1) {
+		if (!fgets(line, 1024, stdin)) {
+			printf("Closing Connection..\n");
+			break;
+		}
+		if ((sendStat = send(client, line, strlen(line),0)) <0){
+			perror("Sending failed\n");
+			break;
+		}
+		byteSent += sendStat;
 
+	}
+	fprintf(stderr,"Sent %d bytes\n",byteSent);
+	close(client);
 	return 0;
 }
