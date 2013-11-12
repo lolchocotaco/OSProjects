@@ -18,6 +18,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <time.h>
+
 
 #define PORT 8000
 
@@ -41,6 +43,7 @@ int main (int argc, char **argv){
 	int connection;
 	int sendStat;
 	int byteSent;
+	clock_t time1;
 	int i;
 	char line[1024];
 
@@ -84,6 +87,7 @@ int main (int argc, char **argv){
 
 	byteSent = 0;
 	// Read from stdin and send to server
+	time1 = clock();
 	while (1) {
 		if (!fgets(line, 1024, stdin)) {
 			printf("Closing Connection..\n");
@@ -96,7 +100,9 @@ int main (int argc, char **argv){
 		byteSent += sendStat;
 
 	}
+	time1 = clock()-time1;
 	fprintf(stderr,"Total bytes sent: %d \n",byteSent);
+	fprintf(stderr,"Throughput: %f Mb/sec\n",byteSent/(1000000*((double)time1)/CLOCKS_PER_SEC));
 	close(client);
 	return 0;
 }

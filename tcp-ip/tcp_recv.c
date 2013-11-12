@@ -10,6 +10,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <time.h>
 
 #define PORT 8000
 
@@ -27,16 +28,26 @@ int main (int argc, char **argv){
 	struct sockaddr_in client_addr;  
 	int sockoptval = 1;
 	int server;
-	char buffer[1024];
+	char * buffer;
 	int readBytes;
 	int totalBytes= 0;
+	clock_t time1;
 
-	memset(buffer,0,sizeof(buffer));
+	// memset(buffer,0,sizeof(buffer));
 
-	char hostname[1024];
+	char* hostname;
+	hostname = (char*)malloc(1024);
+	buffer = (char*)malloc(1024);
+	
+	if( buffer == NULL || hostname == NULL){
+		fprintf(stderr,"Malloc failed!");
+		exit(-1);
+	}
+
 	gethostname(hostname,1024);
 	port = atoi(argv[1]);
-	
+
+
 	// Create socket
 	if((server = socket(AF_INET, SOCK_STREAM,0)) <0){
 		perror("Cannot create socket: ");
@@ -65,28 +76,32 @@ int main (int argc, char **argv){
 	}
 
 	// Wait for connections and take actions when done. 
-	printf("Server started on %s, listening on port %d\n", hostname, port);
+	fprintf(stderr,"Server started on %s, listening on port %d\n", hostname, port);
 	alen = sizeof(client_addr);
-	// while(1){
-		if ((rqst = accept(server, (struct sockaddr *)&client_addr, &alen)) < 0){
-			perror("Accept failed: ");
-			exit(-1);
-		}
-		printf("Received a connection from: %s port %d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
-        while((readBytes = read(rqst,buffer,1024) ) >0){
-        	printf("%s",buffer);
-        	memset(buffer,0,sizeof(buffer));
-        	totalBytes += readBytes;
-        } 
-        if(readBytes == 0){
-        	printf("\nConnection closed from: %s\n", inet_ntoa(client_addr.sin_addr));
-        } else {
-        	fprintf(stderr,"Error reading from socket");
-        	exit(-1);
-        }
-        fprintf(stderr,"Total bytes received: %d\n",totalBytes);
-		close(rqst); // close after done and wait for new connection.. 
-	// }
+
+
+	time1 = clock();
+	if ((rqst = accept(server, (struct sockaddr *)&client_addr, &alen)) < 0){
+		perror("Accept failed: ");
+		exit(-1);
+	}
+	fprintf(stderr,"Received a connection from: %s port %d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+    while((readBytes = read(rqst,buffer,1024) ) >0){
+    	printf("%s",buffer);
+    	memset(buffer,0,sizeof(buffer));
+    	totalBytes += readBytes;
+    } 
+    if(readBytes == 0){
+    	fprintf(stderr,"\nClient closed connection\n");
+    } else {
+    	fprintf(stderr,"Error reading from socket");
+    	exit(-1);
+    }
+
+    time1 = clock() - time1;
+    fprintf(stderr,"Total bytes received: %d from %s\n",totalBytes,inet_ntoa(client_addr.sin_addr));
+    fprintf(stderr,"Throughput: %f Mb/sec\n",totalBytes/(1000000.0*((double)time1)/CLOCKS_PER_SEC));
+	close(rqst); // close after done and wait for new connection.. 
 
 
     return 0;
