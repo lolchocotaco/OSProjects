@@ -70,7 +70,7 @@ int main (int argc, char **argv){
 		inet_aton(hostName,&server.sin_addr);
 	} else{
 		if ( (host = gethostbyname(hostName)) == NULL) {
-			fprintf(stderr, "Could not lookup '%s': %s\n",hostName, strerror(h_errno));
+			fprintf(stderr, "Unknown host: '%s': %s\n", hostName, strerror(h_errno));
 			exit(-1);
 		}
 		memcpy(&server.sin_addr, host->h_addr, sizeof(server.sin_addr));

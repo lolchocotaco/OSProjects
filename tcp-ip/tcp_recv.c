@@ -26,6 +26,8 @@ int main (int argc, char **argv){
 	socklen_t alen;
 	struct sockaddr_in server_addr;    
 	struct sockaddr_in client_addr;  
+	struct hostent *client;
+	char* clientName;
 	int sockoptval = 1;
 	int server;
 	char * buffer;
@@ -33,7 +35,6 @@ int main (int argc, char **argv){
 	int totalBytes= 0;
 	clock_t time1;
 
-	// memset(buffer,0,sizeof(buffer));
 
 	char* hostname;
 	hostname = (char*)malloc(1024);
@@ -92,18 +93,24 @@ int main (int argc, char **argv){
     	totalBytes += readBytes;
     } 
     if(readBytes == 0){
-    	fprintf(stderr,"\nClient closed connection\n");
+    	fprintf(stderr,"Client closed connection\n");
     } else {
     	fprintf(stderr,"Error reading from socket");
     	exit(-1);
     }
 
     time1 = clock() - time1;
-    fprintf(stderr,"Total bytes received: %d from %s\n",totalBytes,inet_ntoa(client_addr.sin_addr));
+
+    //DNS Lookup
+    if ( (client = gethostbyaddr(&client_addr.sin_addr,sizeof(client_addr.sin_addr),AF_INET)) == NULL) {
+    	clientName = inet_ntoa(client_addr.sin_addr);
+	} else {
+		clientName = client->h_name;
+	}
+
+    fprintf(stderr,"Total bytes received: %d from %s\n",totalBytes,clientName);
     fprintf(stderr,"Throughput: %f Mb/sec\n",totalBytes/(1000000.0*((double)time1)/CLOCKS_PER_SEC));
-	close(rqst); // close after done and wait for new connection.. 
-
-
+	close(rqst);
     return 0;
 }
 
