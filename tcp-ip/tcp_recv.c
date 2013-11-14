@@ -28,7 +28,6 @@ int main (int argc, char **argv){
 	struct sockaddr_in client_addr;  
 	struct hostent *client;
 	char* clientName;
-	int sockoptval = 1;
 	int server;
 	char * buffer;
 	int readBytes;
@@ -57,8 +56,6 @@ int main (int argc, char **argv){
 
 
 
-	// Set special options on socket
-	setsockopt(server,SOL_SOCKET,SO_REUSEADDR, &sockoptval, sizeof(int));
 
 	// Set up server and bind to port. 
 	memset((char*)&server_addr, 0, sizeof(server_addr));  
