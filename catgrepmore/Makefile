@@ -1,4 +1,4 @@
 all:
-	gcc -o catgrep catgrep.c
+	gcc -o catgrep.exe catgrep.c
 2: 
-	gcc -o cgrep catgrep2.c
+	gcc -o cgrep.exe catgrep2.c

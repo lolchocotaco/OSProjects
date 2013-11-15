@@ -1,2 +1,2 @@
 all:
-	gcc -o find find.c
+	gcc -o find.exe find.c
