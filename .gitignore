@@ -1,4 +1,4 @@
-.exe
-.txt
-.csv
-.log
+*.exe
+*.txt
+*.csv
+*.log
