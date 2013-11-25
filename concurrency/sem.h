@@ -7,12 +7,13 @@
 #include <signal.h>
 #define N_PROC 64
 
-int myprocnum;
+int my_procnum; // Virtual PID
 
 /* Semaphore Structure */
 struct sem {
 	unsigned int count;
-	pid_t waiting[N_PROC];
+	int waiting[N_PROC];
+	pid_t sempids[N_PROC];
 	volatile char lock;
 };
 
@@ -20,7 +21,7 @@ struct sem {
 /* Assembly Code*/
 int tas(volatile char *lock);
 /* Initialize the sempahore *s with the initial count */
-void sem_int( struct sem *s, int count);
+void sem_init( struct sem *s, int count);
 /* Attept to atomically decrement the semaphore */
 int sem_try(struct sem *s);
 /* Perfom operation while blocking until successful*/

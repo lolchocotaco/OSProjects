@@ -13,7 +13,7 @@ void sigHandler(int signal){
 }
 
 
-void sem_int(struct sem *s, int count){
+void sem_init(struct sem *s, int count){
 	s->lock = 0;
 	s->count = count; 
 }
@@ -33,7 +33,8 @@ void sem_wait(struct sem *s){
 		}
 		else{	//No resources
 			pid_t p = getpid();
-			s->waiting[myprocnum] = p;
+			s->waiting[my_procnum] = 1;
+			s->sempids[my_procnum] = p; // Save real PID
 			printf("sleepingPID: %d\n", p);
 
 			// Go to sleep
@@ -50,5 +51,16 @@ void sem_wait(struct sem *s){
 	}
 }
 void sem_inc(struct sem *s){
-	printf("sem_inc\n");
+	while(tas( &(s->lock)) !=0) {}
+
+	int ind;
+	s->count++;
+	for(ind = 0; ind< N_PROC; ind++){
+		if(s->waiting[ind]){
+			s->waiting[ind] = 0;
+			kill(s->sempids[ind],SIGUSR1);
+		}
+	}
+
+	s->lock = 0;
 }
