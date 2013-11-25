@@ -1,16 +1,19 @@
 #ifndef SEM_H
 #define SEM_H
 
+#include <stdio.h>
 #include <sys/types.h>
 #include <sys/sem.h>
+#include <signal.h>
+#define N_PROC 64
 
+int myprocnum;
 
-/* One semaphore structure for each semaphore in the system. */
+/* Semaphore Structure */
 struct sem {
-    pid_t   sempid;         /* pid of last operation */
-    unsigned short int semval;         /* current value */
-    unsigned short int semncnt;        /* num procs awaiting increase in semval */
-    unsigned short int semzcnt;        /* num procs awaiting semval = 0 */
+	unsigned int count;
+	pid_t waiting[N_PROC];
+	volatile char lock;
 };
 
 
