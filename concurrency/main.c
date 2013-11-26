@@ -13,15 +13,16 @@ int main(int argc, char**argv){
 	}
 	int nP,numProc,nW, numWords;
 	unsigned long readVal;
-	unsigned int pID;
+	unsigned int pidz;
 	int seqNum;
 	int tots =0 ;
 
 	numProc = atoi(argv[1]);
 	numWords= atoi(argv[2]);
 
+
+	/* Create Shared FIFO */
 	f = mmap (NULL, sizeof(struct fifo), PROT_READ | PROT_WRITE,MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-	
 	if(f == NULL){
 		perror("mmap error ");
 		exit(-1);
@@ -29,7 +30,13 @@ int main(int argc, char**argv){
 	
 	fifo_init(f);
 	printf("Spawning %d process sending %d words\n",numProc,numWords);
-	// Reading
+	my_procnum = 0;
+	
+	/* Writing
+		Fork Processes and in each process write word to FIFO. 
+		The number of processes and number of words is specified by the user.
+		The word sent is the process number in the first 6 bits, and the sequence number in the remaining
+	*/
 	for(nP = 0; nP < numProc; nP++){
 		switch(fork()){
 			case -1:
@@ -38,30 +45,27 @@ int main(int argc, char**argv){
 			case 0:
 				my_procnum = nP;
 				for(nW = 0; nW < numWords; nW++){
-					// printf("Process Num: %d\t",nP+1);
-					// printf("SeqNum: %d\t",nW+1);
-					// printf("Sending: %d\n",(nP+1)|((nW + 1)<<6));
 					fifo_wr(f,(nP+1)|((nW + 1)<<6));
 				}
+				printf("Process #%d wrote successfully: %d\n",nP, (numWords)*(numWords+1)/2);
 				exit(0);
 				break;
 		}
-	}
-	//Read
+	} 
 	
+	/* Reading 
+		Reads from the fifo for the same number of processes that were initialized. 
+	*/
 	for(nP = 0; nP<numProc; nP++ ){
 		for(nW = 0; nW<numWords; nW++){
 			readVal=fifo_rd(f);
-			// printf("Recv'd %ld\n",readVal);
 			seqNum = readVal>>6;
-			pID = ~((seqNum <<6) & readVal);
+			pidz = ~((seqNum << 6) & readVal);
 			tots +=seqNum;
-			// Verifications
 		}
 	}
-	printf("Sum sent: %d | Sum recv: %d\n",(numWords)*(numWords+1)/2*numProc,tots);
 
-
-
+	printf("Succesfully sent: %d using %d processes\n", (numWords)*(numWords+1)/2*numProc,nP);
+	printf("Recv'd total of : %d from  %d processes\n",tots,nP);
 	return 0;
 }

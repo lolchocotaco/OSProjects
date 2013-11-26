@@ -17,7 +17,6 @@ struct sem {
 	volatile char lock;
 };
 
-
 /* Assembly Code*/
 int tas(volatile char *lock);
 /* Initialize the sempahore *s with the initial count */

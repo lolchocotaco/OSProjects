@@ -12,12 +12,10 @@ void sigHandler(int signal){
 	// printf(".");
 }
 
-
 void sem_init(struct sem *s, int count){
 	s->lock = 0;
 	s->count = count; 
 }
-
 
 int sem_try(struct sem *s){
 	while(tas( &(s->lock)) !=0) {} // Get access to semaphore
