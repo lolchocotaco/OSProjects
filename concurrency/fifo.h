@@ -1,3 +1,11 @@
+///////////////////////////
+// Sameer Chauhan        //
+// ECE357                //
+// Semaphores (Header)   //
+///////////////////////////
+
+
+
 #ifndef FIFO_H
 #define FIFO_H
 

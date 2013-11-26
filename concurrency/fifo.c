@@ -4,9 +4,7 @@
 // Fifo  				 //
 ///////////////////////////
 
-
 #include "fifo.h"
-
 
 void fifo_init( struct fifo *f){
 	f->rStart = 0;

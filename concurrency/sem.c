@@ -7,10 +7,7 @@
 
 #include "sem.h"
 
-
-void sigHandler(int signal){
-	// printf(".");
-}
+void sigHandler(int signal){}
 
 void sem_init(struct sem *s, int count){
 	s->lock = 0;
@@ -57,6 +54,7 @@ void sem_wait(struct sem *s){
 		}
 	}
 }
+
 void sem_inc(struct sem *s){
 	while(tas( &(s->lock)) !=0) {}
 

@@ -1,3 +1,9 @@
+///////////////////////////
+// Sameer Chauhan        //
+// ECE357                //
+// Semaphores (Header)   //
+///////////////////////////
+
 #ifndef SEM_H
 #define SEM_H
 
