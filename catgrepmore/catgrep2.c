@@ -142,7 +142,7 @@ int main (int argc, char **argv){
 		    				perror("Error occured while writing to pipe");
 		    				exit(-1);
 		    			}
-						if( close(grepfds[1])<0){
+						if( close(grepfds[1])<0 || close(inFile) < 0){
 							perror("Error closing pipe: ");
 							exit(-1);
 						}
