@@ -9,7 +9,7 @@
 
 
 void sigHandler(int signal){
-	printf("Waking up...\n");
+	// printf(".");
 }
 
 
@@ -20,13 +20,23 @@ void sem_init(struct sem *s, int count){
 
 
 int sem_try(struct sem *s){
-	//Wut
+	while(tas( &(s->lock)) !=0) {} // Get access to semaphore
+
+	if(s->count > 0){ //Has resources
+		(s->count)--;
+		s->lock = 0;
+		return 1;
+	}
+	else{	//No resources
+		s->lock = 0;
+		return 0;
+	}
 }
 void sem_wait(struct sem *s){
 	while(1){
 		while(tas( &(s->lock)) !=0) {} // Get access to semaphore
 
-		if(s->count >0){ //Has resources
+		if(s->count > 0){ //Has resources
 			(s->count)--;
 			s->lock = 0;
 			return;
@@ -35,7 +45,6 @@ void sem_wait(struct sem *s){
 			pid_t p = getpid();
 			s->waiting[my_procnum] = 1;
 			s->sempids[my_procnum] = p; // Save real PID
-			printf("sleepingPID: %d\n", p);
 
 			// Go to sleep
 			sigset_t mask;
@@ -59,6 +68,7 @@ void sem_inc(struct sem *s){
 		if(s->waiting[ind]){
 			s->waiting[ind] = 0;
 			kill(s->sempids[ind],SIGUSR1);
+			break;
 		}
 	}
 

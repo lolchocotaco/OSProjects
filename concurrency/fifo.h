@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include <sys/types.h>
+#include <stdlib.h>
+#include <sys/mman.h>
 #include <sys/sem.h>
 #include <signal.h>
 #include  "sem.h"
@@ -13,7 +15,6 @@ struct fifo{
 	int rStart, wStart;
 	struct sem access, read, write;
 };
-
 
 /* Initialize the shared memory*/
 void fifo_init( struct fifo *f);
