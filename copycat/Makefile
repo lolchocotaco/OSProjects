@@ -1,2 +1,2 @@
 all:
-	gcc -o copycat copycat.c
+	gcc -o copycat.exe copycat.c

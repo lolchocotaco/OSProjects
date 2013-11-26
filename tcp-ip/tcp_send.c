@@ -53,6 +53,13 @@ int main (int argc, char **argv){
 		perror("Could not create TCP socket: ");
 		exit(-1);
 	}
+
+	//Set lingering options
+	struct linger so_linger;
+	so_linger.l_onoff = 1; //Wait all messagest being send
+	so_linger.l_linger = 30;
+	setsockopt(client,SOL_SOCKET,SO_LINGER, &so_linger, sizeof(so_linger));
+
 	hostName = (char *)malloc(strlen(argv[1]));
 	strcpy(hostName,argv[1]);   // Save hostName
 	port = atoi(argv[2]); 		//Save port number

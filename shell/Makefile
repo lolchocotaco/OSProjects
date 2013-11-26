@@ -1,2 +1,2 @@
 all:
-	gcc -o mysh shell.c
+	gcc -o mysh.exe shell.c
