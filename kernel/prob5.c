@@ -13,10 +13,28 @@
 
 #define BILLION 1000000000L
 
+
+/*
+	Since each loop is run 1 Billion times,
+	the time for each loop is exactly the same time in nanoseconds. 
+	ex: Total loop time = 1s --> single loop time 1ns
+
+	Compiled with options -O0 to turn off compilier optimizations
+
+	First case is the fastest case. 
+	Second is marginally slower, maybe due to compiler optimizations. 
+	Third case takes forever. 
+ */
+
+
+
+
+
 void emptyFunction(){}
 void simpleFunction(){
 	getuid();
 }
+
 
 int main(int argc, char **argv){
 
@@ -58,5 +76,6 @@ int main(int argc, char **argv){
 	double elapsed = (double)( tEnd.tv_sec - tStart.tv_sec )
 		+(double)( tEnd.tv_nsec - tStart.tv_nsec )/(double)BILLION;
 
-	printf("TimeTaken: %lf\n",elapsed);
+
+	printf("Time taken per loop: %lfns\n",elapsed); // Because dividing by 1e9 and multing by 1e9 is the same
 }

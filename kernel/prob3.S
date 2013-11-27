@@ -1,6 +1,8 @@
 # Sameer Chauhan
 # Write and Exit System calls
 
+# Program exists correctly with exit code of 1
+
 .text
 
     .global _start            # tells ld where to start

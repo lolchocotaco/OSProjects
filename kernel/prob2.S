@@ -1,6 +1,10 @@
 # Sameer Chauhan
 # Write-only system call
 
+# Program successfully writes to stdout
+# Without a exit call the program segfaults. 
+
+
 .text
 
     .global _start            # tells ld where to start

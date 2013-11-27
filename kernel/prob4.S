@@ -1,5 +1,12 @@
 # Sameer Chauhan
 # Write and Exit System calls
+# Incorrect parameters
+
+# Passing invalid addresses gives "Bad Address"
+# calling an incorrect system call results in "invalid parameters"
+
+
+
 
 .text
 
