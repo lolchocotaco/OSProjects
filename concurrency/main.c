@@ -43,7 +43,7 @@ int main(int argc, char**argv){
 		The number of processes and number of words is specified by the user.
 		The word sent is the process number in the first 6 bits, and the sequence number in the remaining
 	*/
-	for(nP = 0; nP < numProc; nP++){
+	for(nP = 1; nP < numProc+1; nP++){
 		switch(fork()){
 			case -1:
 				perror("Forking failed");

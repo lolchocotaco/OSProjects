@@ -6,8 +6,6 @@
 # calling an incorrect system call results in "invalid parameters"
 
 
-
-
 .text
 
     .global _start            # tells ld where to start
@@ -18,9 +16,9 @@ _start:
     # write(stdout, message, length)
     # rdi, rsi, & rdx are arguments
  
-    movq    $1000, %rax     # incorrect system call for write
+    movq    $1, %rax     # incorrect system call for write
     movq    $1, %rdi        # stdout is 1
-    movq    $message, %rsi  # message address
+    movq    $1, %rsi  # message address
     movq    $length, %rdx   # message string length
     syscall              # call write
  
@@ -36,3 +34,6 @@ _start:
 message: 
         .ascii "Hello\n"
         length = . - message        # text and \n
+
+
+

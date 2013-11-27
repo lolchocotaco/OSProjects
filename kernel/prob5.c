@@ -13,7 +13,6 @@
 
 #define BILLION 1000000000L
 
-
 /*
 	Since each loop is run 1 Billion times,
 	the time for each loop is exactly the same time in nanoseconds. 
@@ -27,14 +26,10 @@
  */
 
 
-
-
-
 void emptyFunction(){}
 void simpleFunction(){
 	getuid();
 }
-
 
 int main(int argc, char **argv){
 
