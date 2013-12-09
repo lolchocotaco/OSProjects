@@ -25,7 +25,6 @@
 
 #define MAX_LENGTH 1024
 #define DELIMS " \t\r\n"
-#define DELIMS2 " \t\r\n<>"
 
 // Redirect fName to stdFD using options
 void redirect(char *fName, int stdFD, int options	){
