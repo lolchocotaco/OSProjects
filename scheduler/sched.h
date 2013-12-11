@@ -10,9 +10,10 @@
 #define SCHED_H
 
 #include "savectx.h"
+#include "jmpbuf-offsets.h"
 
 
-#define SCHED_NPROC 	512
+#define SCHED_NPROC 	511
 #define SCHED_READY 	0
 #define SCHED_RUNNING 	1
 #define SCHED_SLEEPING 	2
@@ -27,7 +28,7 @@
 		Accumulated
 		CPU Time
 		Stack Address
-		Others
+		Context switch
 
 */
 struct sched_proc {
@@ -59,7 +60,7 @@ struct sched_waitq {
 	Initial task has PID of 1
 		Makes it runnable and transfers execuation to init_fn
  */
-void sched_init(void (*init_fun)());
+void sched_init(void (*init_fn)());
 
 int sched_fork();
 

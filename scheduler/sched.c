@@ -20,7 +20,7 @@ struct sched_proc *curProc;
 struct sched_proc* q[SCHED_NPROC];
 sigset_t mask;
 
-void sched_init(void (*init_fun)()){
+void sched_init(void (*init_fn)()){
 	// Set interval timer
 	struct itimerval timer;
 	timer.it_value.tv_sec = 0;
@@ -28,14 +28,13 @@ void sched_init(void (*init_fun)()){
 	timer.it_interval.tv_sec = 0;
 	timer.it_interval.tv_usec = 1000; //100 ms
 
-	if (setitimer(ITIMER_VIRTUAL,&timer,NULL) < 0) {
+	if (setitimer(ITIMER_VIRTUAL, &timer, NULL) < 0) {
 		perror("Cannot set timer: ");
 		exit(-1);
 	}
 
 	// Set sched_tick() as signal handler
 	signal(SIGVTALRM, sched_tick);
-
 	// Create stack
 	void *newSP;
 	if ((newSP=mmap(0, STACK_SIZE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, 0 , 0)) == MAP_FAILED){
@@ -48,26 +47,31 @@ void sched_init(void (*init_fun)()){
 		fprintf(stderr,"Could not malloc for process\n");
 		exit(-1);
 	}
+	// Set values within current Process
 	curProc -> pid = 1;
+	curProc -> ppid = 0;
 	curProc -> state = SCHED_READY;
 	curProc -> stackPtr = newSP;
 	
-	// Probably not needed. 
+
+	//// Probably not needed. 
 	// sigemptyset(&mask);
 	// sigaddset(&mask,SIGVTALRM);
 	// sigprocmask(SIG_BLOCK,&mask,NULL);
 	// sigprocmask(SIG_UNBLOCK,&mask,NULL);
-
-
-	// Add process to queue
+	////
 
 	// Set context switch
 	struct savectx ctx;
-	ctx.regs[JB_SP] = curProc->stackPtr+STACK_SIZE;
-	ctx.regs[JB_BP] = curProc->stackPtr+STACK_SIZE;
-	curProc -> ctx = &ctx;
+	ctx.regs[JB_SP] = curProc -> stackPtr + STACK_SIZE;
+	ctx.regs[JB_BP] = curProc -> stackPtr + STACK_SIZE;
+	ctx.regs[JB_PC] = init_fn;
 
+	// Add process to queue
 	q[1] = curProc;
+	
+	restorectx(&ctx, 0);
+
 	return;
 }
 

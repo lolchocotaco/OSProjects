@@ -4,7 +4,7 @@
 
 void testFunc(){
 	printf("Hello\n");
-	return;
+	exit(0);
 }
 
 int main(int argc, char **argv){
