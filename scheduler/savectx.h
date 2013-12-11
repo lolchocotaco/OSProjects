@@ -1,4 +1,4 @@
-#include "jmpbuf-offsets64.h"
+#include "jmpbuf-offsets.h"
 
 struct savectx {
 	void *regs[JB_SIZE];
