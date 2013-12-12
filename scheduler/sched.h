@@ -17,8 +17,9 @@
 #define SCHED_READY 	0
 #define SCHED_RUNNING 	1
 #define SCHED_SLEEPING 	2
-#define SCHED_ZOMBIE 	-1
-
+#define SCHED_ZOMBIE   -1
+#define TRUE			1
+#define FALSE			0
 
 /* 
 	Structure used for each simulated task 
@@ -35,12 +36,11 @@ struct sched_proc {
 	int state;
 	int pid;
 	int ppid;
-	int priority;
-	int totTime;
-	int cpuTime;
-	int nice;
+	int nice;     // Static Priority
+	int priority; // Dynamic Priority
+	int cpuTicks;
 	void *stackPtr;
-	struct savectx *ctx;
+	struct savectx ctx;
 };
 
 
@@ -68,9 +68,11 @@ int sched_exit(int code);
 
 int sched_wait(int *exit_code);
 
-int sched_nice(int niceval);
+void sched_nice(int niceval);
 
 int sched_getpid();
+
+int sched_getppid();
 
 int sched_gettick();
 

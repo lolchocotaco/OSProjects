@@ -2,16 +2,38 @@
 #include <stdio.h>
 #include "sched.h"
 
+
+child(){
+	printf("In the child");
+	while(1){
+	}
+	
+}
+
+parent(){
+	printf("In the parent");
+	while(1){
+	}
+}
+
+
+
 void testFunc(){
-	printf("Hello\n");
+	switch( sched_fork() ){
+		case 0:
+			child();
+			break;
+		default:
+			parent();
+			break;
+	}
 	exit(0);
 }
 
 int main(int argc, char **argv){
 
-	printf("Making Schedule?\n");
+	printf("Making Schedule---\n");
 	sched_init(testFunc);
-	printf("Pid is %d\n",sched_getpid());
 
 	return 0;
 }
