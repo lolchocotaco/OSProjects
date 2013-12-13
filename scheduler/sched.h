@@ -39,6 +39,7 @@ struct sched_proc {
 	int nice;     // Static Priority
 	int priority; // Dynamic Priority
 	int cpuTicks;
+	int curTicks;
 	void *stackPtr;
 	struct savectx ctx;
 };

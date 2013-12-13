@@ -28,9 +28,9 @@ void sched_init(void (*init_fn)()){
 	// Set interval timer
 	struct itimerval timer;
 	timer.it_value.tv_sec = 0;
-	timer.it_value.tv_usec = 5000; // 100 ms
+	timer.it_value.tv_usec = 250000; // 100 ms
 	timer.it_interval.tv_sec = 0;
-	timer.it_interval.tv_usec = 5000; //100 ms
+	timer.it_interval.tv_usec = 250000; //100 ms
 	if (setitimer(ITIMER_VIRTUAL, &timer, NULL) < 0) {
 		perror("Cannot set timer: ");
 		exit(-1);
@@ -122,24 +122,30 @@ int sched_fork(){
 	newProc->stackPtr = newSP;
 	q[pidVal] = newProc; 
 
-	// Save context for child
+	// Save context for child (in parent)
 	if (savectx(&newProc->ctx)  == 0){
 		newProc->ctx.regs[JB_SP] += newSP - curProc -> stackPtr ;
 		newProc->ctx.regs[JB_BP] += newSP - curProc -> stackPtr ;
 		sigprocmask(SIG_UNBLOCK,&mask,NULL);
 		return(pidVal);
 	} 
+
 	//In child 
 	sigprocmask(SIG_UNBLOCK,&mask,NULL);
 	return 0;
 }
 
-int sched_exit(int code){
-	// curProc -> state = SCHED_ZOMBIE;
-	return 0;
+sched_exit(int code){
+	curProc -> state = SCHED_ZOMBIE;
+	if(q[curProc->ppid]->state == SCHED_SLEEPING){
+		//Wake up parent if it is sleeping
+		//Send it return code
+	}
+	sched_switch();	
 }
 
 int sched_wait(int *exit_code){
+	//
 	return 0;
 }
 
@@ -218,15 +224,20 @@ void sched_switch(){
 	}
 
 	return;
-
 }
 
 void sched_tick(){
 
 	numTicks++;
 	curProc -> cpuTicks++;
-	printf("numTicks: %d\n",curProc->cpuTicks);
-	sched_switch();
+	curProc -> curTicks++;
+	printf("Process %d with ticks: %d\n",curProc->pid,curProc->curTicks);
+	if(curProc->curTicks >=TICKWINDOW){
+		curProc->curTicks = 0;
+		sched_switch();
+	}
+
+
 
 	return;
 }

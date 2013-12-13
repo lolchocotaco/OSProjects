@@ -4,14 +4,14 @@
 
 
 child(){
-	printf("In the child");
+	printf("In the child\n");
 	while(1){
 	}
 	
 }
 
 parent(){
-	printf("In the parent");
+	printf("In the parent\n");
 	while(1){
 	}
 }
