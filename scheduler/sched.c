@@ -140,6 +140,7 @@ sched_exit(int code){
 	sigprocmask(SIG_BLOCK,&mask,NULL);
 	curProc -> state = SCHED_ZOMBIE;
 	if (q[curProc->ppid] != NULL && q[curProc->ppid]->state == SCHED_SLEEPING){
+		printf("Saving info to Parent\n");
 		q[curProc->ppid]->oneExitCode = code;
 		q[curProc->ppid]->state = SCHED_READY;
 	}
@@ -149,47 +150,69 @@ sched_exit(int code){
 /* Function to determine existance/state of child */
 int findChild(int parentPid, int *childPid){
 	int cPid;
-	int runningFound = FALSE;
-	int runningPid;
+	int readyFound = FALSE;
+	int readyPid;
 	for (cPid = 1; cPid < SCHED_NPROC; cPid++){
 		if (q[cPid] != NULL && q[cPid] -> ppid == parentPid){
-			if (q[cPid]->state == SCHED_RUNNING){
-				runningPid = cPid;
-				runningFound = TRUE;
+			if (q[cPid]->state == SCHED_READY){
+				readyPid = cPid;
+				readyFound = TRUE;
 			} else if (q[cPid]->state == SCHED_ZOMBIE){
 				*childPid = cPid; 
 				return CHILD_DEAD;
 			}
 		}
 	}
-	if(runningFound == TRUE){
-		*childPid = runningPid;
-		return CHILD_RUNNING;
+	if(readyFound == TRUE){
+		*childPid = readyPid;
+		return CHILD_READY;
 	}
 	return CHILD_DNE;
 }
 
 
 int sched_wait(int *exit_code){
-	
+	fprintf(stderr,"PID %d is waiting....\n", curProc->pid);
 	sigprocmask(SIG_BLOCK,&mask,NULL);
 	int childPid;
 	// Do different operations depending on child state
 	switch(findChild(curProc->pid, &childPid)){
 		case CHILD_DNE:
+			fprintf(stderr,"No Child Bro\n");
 			return -1;
-		case CHILD_RUNNING:
+
+		case CHILD_READY:
+			fprintf(stderr,"Child is running\n");
 			curProc->state = SCHED_SLEEPING;
 			sched_switch();
+			// Child wakes you up cause he's dead
+			*exit_code = curProc->oneExitCode;
+			munmap(q[childPid]->stackPtr, STACK_SIZE);
+			free(q[childPid]);
+			q[childPid] = NULL;
 			break;
+
 		case CHILD_DEAD:
+			fprintf(stderr,"Child is dead\n");
 			// save exit code
 			*exit_code = curProc->oneExitCode;
 			// save exit code
+			if (munmap(q[childPid]->stackPtr, STACK_SIZE) == -1){
+				perror("Failed to unmap ");
+				break;
+			}
+
 			free(q[childPid]);
 			q[childPid] = NULL;
 			sched_switch();
 			break;
+		
+		default:
+			//Debug not happening
+			fprintf(stderr,"Child info: \n ");
+			fprintf(stderr,"\tPID: %d\n",q[childPid]->pid);
+			fprintf(stderr,"\tState %s\n",q[childPid]-> state == -1 ? STATUS[3] : STATUS[q[childPid]->state]);
+
 	}
 	return 0;
 }

@@ -5,14 +5,21 @@
 
 child(){
 	printf("In the child\n");
+	unsigned int count;
+	for (count = 0; count < 1000000000; count++){}
 	sched_exit(1);
 	
 }
 
 parent(){
 	printf("In the parent\n");
-	while(1){
+	int childRet;
+
+	unsigned int count;
+	for (count = 0; count < 2000000000; count ++){	
 	}
+	sched_wait(&childRet);
+	fprintf(stderr,"Child returned %d\n",childRet);
 }
 
 

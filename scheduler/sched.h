@@ -20,7 +20,7 @@
 #define SCHED_ZOMBIE   -1
 #define TRUE			1
 #define FALSE			0
-#define CHILD_RUNNING	1
+#define CHILD_READY		1
 #define	CHILD_DEAD	   -1
 #define CHILD_DNE		2
 #define STATUS (const char*[4]){"READY","RUNNER","SLEEP","ZOMBIE"}  
