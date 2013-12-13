@@ -5,8 +5,7 @@
 
 child(){
 	printf("In the child\n");
-	while(1){
-	}
+	sched_exit(1);
 	
 }
 

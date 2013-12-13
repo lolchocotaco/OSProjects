@@ -20,6 +20,10 @@
 #define SCHED_ZOMBIE   -1
 #define TRUE			1
 #define FALSE			0
+#define CHILD_RUNNING	1
+#define	CHILD_DEAD	   -1
+#define CHILD_DNE		2
+#define STATUS (const char*[4]){"READY","RUNNER","SLEEP","ZOMBIE"}  
 
 /* 
 	Structure used for each simulated task 
@@ -40,6 +44,7 @@ struct sched_proc {
 	int priority; // Dynamic Priority
 	int cpuTicks;
 	int curTicks;
+	int oneExitCode; //Single Child Exit COde
 	void *stackPtr;
 	struct savectx ctx;
 };

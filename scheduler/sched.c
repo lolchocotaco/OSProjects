@@ -136,16 +136,61 @@ int sched_fork(){
 }
 
 sched_exit(int code){
+
+	sigprocmask(SIG_BLOCK,&mask,NULL);
 	curProc -> state = SCHED_ZOMBIE;
-	if(q[curProc->ppid]->state == SCHED_SLEEPING){
-		//Wake up parent if it is sleeping
-		//Send it return code
+	if (q[curProc->ppid] != NULL && q[curProc->ppid]->state == SCHED_SLEEPING){
+		q[curProc->ppid]->oneExitCode = code;
+		q[curProc->ppid]->state = SCHED_READY;
 	}
 	sched_switch();	
 }
 
+/* Function to determine existance/state of child */
+int findChild(int parentPid, int *childPid){
+	int cPid;
+	int runningFound = FALSE;
+	int runningPid;
+	for (cPid = 1; cPid < SCHED_NPROC; cPid++){
+		if (q[cPid] != NULL && q[cPid] -> ppid == parentPid){
+			if (q[cPid]->state == SCHED_RUNNING){
+				runningPid = cPid;
+				runningFound = TRUE;
+			} else if (q[cPid]->state == SCHED_ZOMBIE){
+				*childPid = cPid; 
+				return CHILD_DEAD;
+			}
+		}
+	}
+	if(runningFound == TRUE){
+		*childPid = runningPid;
+		return CHILD_RUNNING;
+	}
+	return CHILD_DNE;
+}
+
+
 int sched_wait(int *exit_code){
-	//
+	
+	sigprocmask(SIG_BLOCK,&mask,NULL);
+	int childPid;
+	// Do different operations depending on child state
+	switch(findChild(curProc->pid, &childPid)){
+		case CHILD_DNE:
+			return -1;
+		case CHILD_RUNNING:
+			curProc->state = SCHED_SLEEPING;
+			sched_switch();
+			break;
+		case CHILD_DEAD:
+			// save exit code
+			*exit_code = curProc->oneExitCode;
+			// save exit code
+			free(q[childPid]);
+			q[childPid] = NULL;
+			sched_switch();
+			break;
+	}
 	return 0;
 }
 
@@ -180,12 +225,12 @@ void sched_ps(){
 	printf("pid \t ppid \t state \t Stack BP \t Wait Queue \t S_P \t D_P \t CPU \n");
 	printf("--- \t ---- \t ----- \t -------- \t ---------- \t --- \t --- \t --- \n");
 	int n;
-	for (n = 0; n < SCHED_NPROC; n++){
+	for (n = 1; n < SCHED_NPROC; n++){
 		if (q[n] != NULL){
-			printf("%d \t %d \t %d \t %p \t %p \t %d \t %d \t %d \n",
+			printf("%d \t %d \t %s\t %p \t %p \t %d \t %d \t %d \n",
 				q[n]-> pid, 
 				q[n]-> ppid, 
-				q[n]-> state, 
+				q[n]-> state == -1 ? STATUS[3] : STATUS[q[n]->state], 
 				q[n]-> stackPtr,
 				q[n], 
 				q[n]-> nice, 
@@ -193,6 +238,7 @@ void sched_ps(){
 				q[n]-> cpuTicks);
 		}
 	}
+
 	return;
 }
 
@@ -202,17 +248,25 @@ void sched_switch(){
 	// Scheduling algorithm (Choose Next Best State)
 	for (pid = 0; pid < SCHED_NPROC; pid++){
 		if (q[pid] != NULL && q[pid]->state == SCHED_READY){
+			fprintf(stderr,"%d\n",q[pid]->state);
 			break;
 		}
 	}
+
 	if (pid == SCHED_NPROC){ //No one is ready
+		sched_ps();
 		sigprocmask(SIG_UNBLOCK,&mask,NULL);
 		return;
 	}
+	fprintf(stderr,"Switching to PID: %d \n", pid);
 
-	//
-	if (savectx(&curProc->ctx) == 0){
+	// Set current process as ready
+	if (curProc->state == SCHED_RUNNING){
 		curProc -> state = SCHED_READY;
+	}
+
+	if (savectx(&curProc->ctx) == 0){
+
 		curProc = q[pid];
 		curProc -> state = SCHED_RUNNING;
 
@@ -236,8 +290,5 @@ void sched_tick(){
 		curProc->curTicks = 0;
 		sched_switch();
 	}
-
-
-
 	return;
 }
