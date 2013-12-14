@@ -3,35 +3,46 @@
 #include "sched.h"
 
 
-child(){
+child(unsigned long long int val, int niceVal){
+	sched_nice(niceVal);
 	printf("In the child\n");
-	unsigned int count;
-	for (count = 0; count < 1000000000; count++){}
-	sched_exit(1);
 	
+	unsigned long long int count;
+	for (count = 0; count < val; count++){}
+	
+	sched_exit(1);	
 }
 
 parent(){
+	sched_nice(3);
 	printf("In the parent\n");
 	int childRet;
 
-	unsigned int count;
-	for (count = 0; count < 2000000000; count ++){	
-	}
-	sched_wait(&childRet);
+	unsigned long long int count;
+	for (count = 0; count < 10000000000; count ++){}
+	
+	sched_wait(&childRet); 
 	fprintf(stderr,"Child returned %d\n",childRet);
 }
 
 
-
 void testFunc(){
+	int secondRet;
 	switch( sched_fork() ){
 		case 0:
-			child();
+			child(5000000000,-5);
 			break;
 		default:
-			parent();
-			break;
+			switch(sched_fork()){
+				case 0:
+					child(20000000000,10);
+					break;
+				default:
+					parent();
+					break;
+			}
+			sched_wait(&secondRet);
+			fprintf(stderr,"Child returned %d\n",secondRet);
 	}
 	exit(0);
 }

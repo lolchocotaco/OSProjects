@@ -23,6 +23,7 @@
 #define CHILD_READY		1
 #define	CHILD_DEAD	   -1
 #define CHILD_DNE		2
+#define NICETHRESH		1000000
 #define STATUS (const char*[4]){"READY","RUNNER","SLEEP","ZOMBIE"}  
 
 /* 

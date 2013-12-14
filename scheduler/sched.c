@@ -16,7 +16,7 @@
 #include "adjstack.c"
 #include "sched.h"
 #define STACK_SIZE 65536
-#define TICKWINDOW 10
+#define TICKWINDOW 20
 
 int F_NEED_RESCHED = FALSE;
 int numTicks = 0;
@@ -266,13 +266,15 @@ void sched_ps(){
 }
 
 void sched_switch(){ 
-	int pid;
-
+	int pid,nPid;
+	int thresh = NICETHRESH;
 	// Scheduling algorithm (Choose Next Best State)
-	for (pid = 0; pid < SCHED_NPROC; pid++){
-		if (q[pid] != NULL && q[pid]->state == SCHED_READY){
-			fprintf(stderr,"%d\n",q[pid]->state);
-			break;
+	for (nPid = 0; nPid < SCHED_NPROC; nPid++){
+		if (q[nPid] != NULL && q[nPid]->state == SCHED_READY){
+			if (q[nPid]->nice + q[nPid]->priority + q[nPid]->cpuTicks< thresh){
+				pid = nPid;
+				thresh = q[nPid]->nice + q[nPid]->priority +q[nPid]->cpuTicks;
+			}
 		}
 	}
 
@@ -305,11 +307,24 @@ void sched_switch(){
 
 void sched_tick(){
 
+	int pid;
+	int totProc=0;
+	// Count number of processes on the Queue not dead
+	for (pid = 1; pid < SCHED_NPROC; pid ++){
+		if (q[pid] != NULL && q[pid]->state != SCHED_ZOMBIE){
+			totProc++;
+		}
+	}
+
+
+	int window = (int)(TICKWINDOW/totProc);
 	numTicks++;
 	curProc -> cpuTicks++;
 	curProc -> curTicks++;
+	curProc -> priority=100*curProc->cpuTicks/((float)numTicks/(float)totProc) ;
 	printf("Process %d with ticks: %d\n",curProc->pid,curProc->curTicks);
-	if(curProc->curTicks >=TICKWINDOW){
+	
+	if(curProc->curTicks >= window){
 		curProc->curTicks = 0;
 		sched_switch();
 	}
