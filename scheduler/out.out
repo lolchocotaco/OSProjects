@@ -1,0 +1,749 @@
+Making Schedule---
+In the parent
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Process 1 with ticks: 5
+Process 1 with ticks: 6
+Switching to PID: 2 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 3 	 6 
+2 	 1 	 RUNNER	 0xf751f000 	 0x8158048 	 0 	 -6 	 0 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 0 	 -6 	 0 
+In the child
+Process 2 with ticks: 1
+Process 2 with ticks: 2
+Process 2 with ticks: 3
+Process 2 with ticks: 4
+Process 2 with ticks: 5
+Process 2 with ticks: 6
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -3 	 6 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 4 	 6 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 0 	 -12 	 0 
+In the child
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -9 	 6 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -2 	 6 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -17 	 6 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -15 	 6 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -8 	 6 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -17 	 12 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -21 	 6 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -14 	 6 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -17 	 18 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -27 	 6 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -20 	 6 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -17 	 24 
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Process 1 with ticks: 5
+Process 1 with ticks: 6
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -27 	 12 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -26 	 6 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -23 	 24 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -33 	 12 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -32 	 6 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -23 	 30 
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Process 1 with ticks: 5
+Process 1 with ticks: 6
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -33 	 18 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -38 	 6 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -29 	 30 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -39 	 18 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -44 	 6 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -29 	 36 
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Process 1 with ticks: 5
+Process 1 with ticks: 6
+Switching to PID: 2 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -39 	 24 
+2 	 1 	 RUNNER	 0xf751f000 	 0x8158048 	 10 	 -50 	 6 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -35 	 36 
+Process 2 with ticks: 1
+Process 2 with ticks: 2
+Process 2 with ticks: 3
+Process 2 with ticks: 4
+Process 2 with ticks: 5
+Process 2 with ticks: 6
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -45 	 24 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -50 	 12 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -41 	 36 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -51 	 24 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -56 	 12 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -41 	 42 
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Process 1 with ticks: 5
+Process 1 with ticks: 6
+Switching to PID: 2 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -51 	 30 
+2 	 1 	 RUNNER	 0xf751f000 	 0x8158048 	 10 	 -62 	 12 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -47 	 42 
+Process 2 with ticks: 1
+Process 2 with ticks: 2
+Process 2 with ticks: 3
+Process 2 with ticks: 4
+Process 2 with ticks: 5
+Process 2 with ticks: 6
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -57 	 30 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -62 	 18 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -53 	 42 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -63 	 30 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -68 	 18 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -53 	 48 
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Process 1 with ticks: 5
+Process 1 with ticks: 6
+Switching to PID: 2 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -63 	 36 
+2 	 1 	 RUNNER	 0xf751f000 	 0x8158048 	 10 	 -74 	 18 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -59 	 48 
+Process 2 with ticks: 1
+Process 2 with ticks: 2
+Process 2 with ticks: 3
+Process 2 with ticks: 4
+Process 2 with ticks: 5
+Process 2 with ticks: 6
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -69 	 36 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -74 	 24 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -65 	 48 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -75 	 36 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -80 	 24 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -65 	 54 
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Process 1 with ticks: 5
+Process 1 with ticks: 6
+Switching to PID: 2 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -75 	 42 
+2 	 1 	 RUNNER	 0xf751f000 	 0x8158048 	 10 	 -86 	 24 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -71 	 54 
+Process 2 with ticks: 1
+Process 2 with ticks: 2
+Process 2 with ticks: 3
+Process 2 with ticks: 4
+Process 2 with ticks: 5
+Process 2 with ticks: 6
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -81 	 42 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -86 	 30 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -77 	 54 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -87 	 42 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -92 	 30 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -77 	 60 
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Process 1 with ticks: 5
+Process 1 with ticks: 6
+Switching to PID: 2 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -87 	 48 
+2 	 1 	 RUNNER	 0xf751f000 	 0x8158048 	 10 	 -98 	 30 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -83 	 60 
+Process 2 with ticks: 1
+Process 2 with ticks: 2
+Process 2 with ticks: 3
+Process 2 with ticks: 4
+Process 2 with ticks: 5
+Process 2 with ticks: 6
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -93 	 48 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -98 	 36 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -89 	 60 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -99 	 48 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -104 	 36 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -89 	 66 
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Process 1 with ticks: 5
+Process 1 with ticks: 6
+Switching to PID: 2 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -99 	 54 
+2 	 1 	 RUNNER	 0xf751f000 	 0x8158048 	 10 	 -110 	 36 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -95 	 66 
+Process 2 with ticks: 1
+Process 2 with ticks: 2
+Process 2 with ticks: 3
+Process 2 with ticks: 4
+Process 2 with ticks: 5
+Process 2 with ticks: 6
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -105 	 54 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -110 	 42 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -101 	 66 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -111 	 54 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -116 	 42 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -101 	 72 
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Process 1 with ticks: 5
+Process 1 with ticks: 6
+Switching to PID: 2 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -111 	 60 
+2 	 1 	 RUNNER	 0xf751f000 	 0x8158048 	 10 	 -122 	 42 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -107 	 72 
+Process 2 with ticks: 1
+Process 2 with ticks: 2
+Process 2 with ticks: 3
+Process 2 with ticks: 4
+Process 2 with ticks: 5
+Process 2 with ticks: 6
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -117 	 60 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -122 	 48 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -113 	 72 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -123 	 60 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -128 	 48 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -113 	 78 
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Process 1 with ticks: 5
+Process 1 with ticks: 6
+Switching to PID: 2 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -123 	 66 
+2 	 1 	 RUNNER	 0xf751f000 	 0x8158048 	 10 	 -134 	 48 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -119 	 78 
+Process 2 with ticks: 1
+Process 2 with ticks: 2
+Process 2 with ticks: 3
+Process 2 with ticks: 4
+Process 2 with ticks: 5
+Process 2 with ticks: 6
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -129 	 66 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -134 	 54 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -125 	 78 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -135 	 66 
+2 	 1 	 READY	 0xf751f000 	 0x8158048 	 10 	 -140 	 54 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -125 	 84 
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Process 1 with ticks: 5
+Process 1 with ticks: 6
+Switching to PID: 2 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -135 	 72 
+2 	 1 	 RUNNER	 0xf751f000 	 0x8158048 	 10 	 -146 	 54 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -131 	 84 
+Process 2 with ticks: 1
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -136 	 72 
+2 	 1 	 ZOMBIE	 0xf751f000 	 0x8158048 	 10 	 12 	 55 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -132 	 84 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Process 3 with ticks: 7
+Process 3 with ticks: 8
+Process 3 with ticks: 9
+Process 3 with ticks: 10
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -146 	 72 
+2 	 1 	 ZOMBIE	 0xf751f000 	 0x8158048 	 10 	 12 	 55 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -132 	 94 
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Process 1 with ticks: 5
+Process 1 with ticks: 6
+Process 1 with ticks: 7
+Process 1 with ticks: 8
+Process 1 with ticks: 9
+Process 1 with ticks: 10
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -146 	 82 
+2 	 1 	 ZOMBIE	 0xf751f000 	 0x8158048 	 10 	 12 	 55 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -142 	 94 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Process 3 with ticks: 7
+Process 3 with ticks: 8
+Process 3 with ticks: 9
+Process 3 with ticks: 10
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -156 	 82 
+2 	 1 	 ZOMBIE	 0xf751f000 	 0x8158048 	 10 	 12 	 55 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -142 	 104 
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Process 1 with ticks: 5
+Process 1 with ticks: 6
+Process 1 with ticks: 7
+Process 1 with ticks: 8
+Process 1 with ticks: 9
+Process 1 with ticks: 10
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -156 	 92 
+2 	 1 	 ZOMBIE	 0xf751f000 	 0x8158048 	 10 	 12 	 55 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -152 	 104 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Process 3 with ticks: 7
+Process 3 with ticks: 8
+Process 3 with ticks: 9
+Process 3 with ticks: 10
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -166 	 92 
+2 	 1 	 ZOMBIE	 0xf751f000 	 0x8158048 	 10 	 12 	 55 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -152 	 114 
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Process 1 with ticks: 5
+Process 1 with ticks: 6
+Process 1 with ticks: 7
+Process 1 with ticks: 8
+Process 1 with ticks: 9
+Process 1 with ticks: 10
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -166 	 102 
+2 	 1 	 ZOMBIE	 0xf751f000 	 0x8158048 	 10 	 12 	 55 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -162 	 114 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Process 3 with ticks: 7
+Process 3 with ticks: 8
+Process 3 with ticks: 9
+Process 3 with ticks: 10
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -176 	 102 
+2 	 1 	 ZOMBIE	 0xf751f000 	 0x8158048 	 10 	 12 	 55 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -162 	 124 
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Process 1 with ticks: 5
+Process 1 with ticks: 6
+Process 1 with ticks: 7
+Process 1 with ticks: 8
+Process 1 with ticks: 9
+Process 1 with ticks: 10
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -176 	 112 
+2 	 1 	 ZOMBIE	 0xf751f000 	 0x8158048 	 10 	 12 	 55 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -172 	 124 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Process 3 with ticks: 7
+Process 3 with ticks: 8
+Process 3 with ticks: 9
+Process 3 with ticks: 10
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -186 	 112 
+2 	 1 	 ZOMBIE	 0xf751f000 	 0x8158048 	 10 	 12 	 55 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -172 	 134 
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Process 1 with ticks: 5
+Process 1 with ticks: 6
+Process 1 with ticks: 7
+Process 1 with ticks: 8
+Process 1 with ticks: 9
+Process 1 with ticks: 10
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 READY	 0xf76e7000 	 0x8158008 	 3 	 -186 	 122 
+2 	 1 	 ZOMBIE	 0xf751f000 	 0x8158048 	 10 	 12 	 55 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -182 	 134 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Process 3 with ticks: 7
+Process 3 with ticks: 8
+Process 3 with ticks: 9
+Process 3 with ticks: 10
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -196 	 122 
+2 	 1 	 ZOMBIE	 0xf751f000 	 0x8158048 	 10 	 12 	 55 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -182 	 144 
+Process 1 with ticks: 1
+Process 1 with ticks: 2
+Process 1 with ticks: 3
+Process 1 with ticks: 4
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -196 	 126 
+3 	 1 	 READY	 0xf750f000 	 0x8158088 	 -5 	 -186 	 144 
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 SLEEP	 0xf76e7000 	 0x8158008 	 3 	 -196 	 126 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -186 	 144 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Process 3 with ticks: 7
+Process 3 with ticks: 8
+Process 3 with ticks: 9
+Process 3 with ticks: 10
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 SLEEP	 0xf76e7000 	 0x8158008 	 3 	 -206 	 126 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -186 	 154 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Process 3 with ticks: 7
+Process 3 with ticks: 8
+Process 3 with ticks: 9
+Process 3 with ticks: 10
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 SLEEP	 0xf76e7000 	 0x8158008 	 3 	 -216 	 126 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -186 	 164 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Process 3 with ticks: 7
+Process 3 with ticks: 8
+Process 3 with ticks: 9
+Process 3 with ticks: 10
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 SLEEP	 0xf76e7000 	 0x8158008 	 3 	 -226 	 126 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -186 	 174 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Process 3 with ticks: 7
+Process 3 with ticks: 8
+Process 3 with ticks: 9
+Process 3 with ticks: 10
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 SLEEP	 0xf76e7000 	 0x8158008 	 3 	 -236 	 126 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -186 	 184 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Process 3 with ticks: 7
+Process 3 with ticks: 8
+Process 3 with ticks: 9
+Process 3 with ticks: 10
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 SLEEP	 0xf76e7000 	 0x8158008 	 3 	 -246 	 126 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -186 	 194 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Process 3 with ticks: 7
+Process 3 with ticks: 8
+Process 3 with ticks: 9
+Process 3 with ticks: 10
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 SLEEP	 0xf76e7000 	 0x8158008 	 3 	 -256 	 126 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -186 	 204 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Process 3 with ticks: 7
+Process 3 with ticks: 8
+Process 3 with ticks: 9
+Process 3 with ticks: 10
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 SLEEP	 0xf76e7000 	 0x8158008 	 3 	 -266 	 126 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -186 	 214 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Process 3 with ticks: 3
+Process 3 with ticks: 4
+Process 3 with ticks: 5
+Process 3 with ticks: 6
+Process 3 with ticks: 7
+Process 3 with ticks: 8
+Process 3 with ticks: 9
+Process 3 with ticks: 10
+Switching to PID: 3 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 SLEEP	 0xf76e7000 	 0x8158008 	 3 	 -276 	 126 
+3 	 1 	 RUNNER	 0xf750f000 	 0x8158088 	 -5 	 -186 	 224 
+Process 3 with ticks: 1
+Process 3 with ticks: 2
+Saving info to Parent
+Switching to PID: 1 
+pid 	 ppid 	 state 	 Stack BP 	 Wait Queue 	 S_P 	 D_P 	 CPU 
+--- 	 ---- 	 ----- 	 -------- 	 ---------- 	 --- 	 --- 	 --- 
+1 	 0 	 RUNNER	 0xf76e7000 	 0x8158008 	 3 	 -278 	 126 
+3 	 1 	 ZOMBIE	 0xf750f000 	 0x8158088 	 -5 	 0 	 226 
