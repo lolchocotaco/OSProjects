@@ -1,3 +1,11 @@
+/////////////////////////////
+// Sameer Chauhan          //
+// Scheduler Test Function //
+// Operating Systems       //
+// Professor Hakner        //
+/////////////////////////////
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "sched.h"
@@ -30,12 +38,12 @@ void testFunc(){
 	int secondRet;
 	switch( sched_fork() ){
 		case 0:
-			child(5000000000,-5);
+			child(5000000000,10);
 			break;
 		default:
 			switch(sched_fork()){
 				case 0:
-					child(20000000000,10);
+					child(20000000000,-5);
 					break;
 				default:
 					parent();

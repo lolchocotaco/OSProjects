@@ -268,12 +268,25 @@ void sched_ps(){
 void sched_switch(){ 
 	int pid,nPid;
 	int thresh = NICETHRESH;
+
+	// Set current process as ready
+	if (curProc->state == SCHED_RUNNING){
+		curProc -> state = SCHED_READY;
+	}
+
+	// Update everyone's priority
+	for (pid = 1; pid < SCHED_NPROC; pid ++){
+		if (q[pid] != NULL && q[pid]->state != SCHED_ZOMBIE){
+			q[pid] -> priority= q[pid]->nice- (numTicks - q[pid]->cpuTicks) ;
+		}
+	}
+
 	// Scheduling algorithm (Choose Next Best State)
 	for (nPid = 0; nPid < SCHED_NPROC; nPid++){
 		if (q[nPid] != NULL && q[nPid]->state == SCHED_READY){
-			if (q[nPid]->nice + q[nPid]->priority + q[nPid]->cpuTicks< thresh){
+			if (q[nPid]->nice + q[nPid]->priority< thresh){
 				pid = nPid;
-				thresh = q[nPid]->nice + q[nPid]->priority +q[nPid]->cpuTicks;
+				thresh = q[nPid]->nice + q[nPid]->priority;
 			}
 		}
 	}
@@ -283,12 +296,9 @@ void sched_switch(){
 		sigprocmask(SIG_UNBLOCK,&mask,NULL);
 		return;
 	}
-	fprintf(stderr,"Switching to PID: %d \n", pid);
+	printf("Switching to PID: %d \n", pid);
 
-	// Set current process as ready
-	if (curProc->state == SCHED_RUNNING){
-		curProc -> state = SCHED_READY;
-	}
+
 
 	if (savectx(&curProc->ctx) == 0){
 
@@ -316,12 +326,14 @@ void sched_tick(){
 		}
 	}
 
-
-	int window = (int)(TICKWINDOW/totProc);
+	int window = (int)(TICKWINDOW/totProc); // Equal Windows
 	numTicks++;
 	curProc -> cpuTicks++;
 	curProc -> curTicks++;
-	curProc -> priority=100*curProc->cpuTicks/((float)numTicks/(float)totProc) ;
+
+
+
+	curProc -> priority= curProc->nice+ (10*curProc->cpuTicks)/numTicks ;
 	printf("Process %d with ticks: %d\n",curProc->pid,curProc->curTicks);
 	
 	if(curProc->curTicks >= window){
